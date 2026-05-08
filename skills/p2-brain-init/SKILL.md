@@ -146,7 +146,7 @@ After the user provides a P2 URL:
 2. Use `get-blog-report-card` with the P2 URL to confirm the blog exists, identify the blog ID, owner, privacy, and stickers.
 3. Use `content-authoring` with the P2 URL or blog ID to list pages and posts. Check `pages.list` first, then `posts.list`.
 4. Use `p2-sites` or `posts-text` only as optional workspace-P2 helpers. If they reject a Personal P2 as "not an Automattic P2" or do not return it, continue with `content-authoring`.
-5. Look for a page titled `Brainstem`. If a `Brain Manifest` page or post exists instead, treat it as legacy naming and recommend renaming or replacing it with the canonical `Brainstem` page.
+5. Look for a page titled `Brainstem`.
 6. If found, summarize the loaded brain profile and note any missing Brainstem fields.
 7. If missing, offer to create and publish the Brainstem page after confirmation.
 8. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
@@ -192,8 +192,6 @@ If a `Brainstem` page already exists:
 2. Summarize what would change.
 3. Ask for confirmation.
 4. Use `pages.update` after confirmation.
-
-If a legacy `Brain Manifest` page or post already exists, offer to rename/update it to `Brainstem` instead of creating a duplicate.
 
 If write tools are unavailable, give the Brainstem draft in chat and ask the user to create a page named `Brainstem`.
 
