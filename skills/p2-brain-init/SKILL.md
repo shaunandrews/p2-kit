@@ -21,9 +21,10 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - Stop after giving form values and ask the user to return with the created P2 URL.
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
 - The initial `Brainstem` should be a page, not a post.
-- Recommend publishing the initial Brainstem page after explicit confirmation; it is canonical setup/configuration, not an ordinary update.
+- When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
+- Do not pause with a yes/no publish question before creating the initial Brainstem.
 - For ordinary memory writes after setup, draft by default unless the user explicitly asks to publish.
-- Do not publish or update P2 content without explicit user confirmation.
+- Do not publish or update ordinary memory content without explicit user confirmation.
 - Prefer private access for personal brains and early project brains.
 - Prefer MC `Personal` type for a private personal brain, and use direct site-scoped WordPress.com/content-authoring tools to access it.
 - Do not treat absence from `p2-sites` or rejection by `posts-text` as proof that a Personal P2 is inaccessible.
@@ -49,7 +50,7 @@ If a URL/domain/blog ID is provided:
 2. Skip the setup questions, name suggestions, and MC form guidance.
 3. Go directly to **Verify the Brain P2**.
 4. After verification, look for `Brainstem`.
-5. If `Brainstem` is missing, offer to create and publish it.
+5. If `Brainstem` is missing, create and publish it.
 
 Do not ask what name or slug the P2 should use when a URL already exists. Infer name, owner, privacy, and type from site metadata where available.
 
@@ -169,43 +170,36 @@ When the request includes a P2 URL/domain/blog ID, or after the user returns wit
 4. Use `p2-sites` or `posts-text` only as optional workspace-P2 helpers. If they reject a Personal P2 as "not an Automattic P2" or do not return it, continue with `content-authoring`.
 5. Look for a page titled `Brainstem`.
 6. If found, summarize the loaded brain profile and note any missing Brainstem fields.
-7. If missing, offer to create and publish the Brainstem page after confirmation.
+7. If missing and the site is reachable, create and publish the Brainstem page.
 8. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
 
 Useful `context-a8c` operations when available:
 
 - `wpcom` provider, `p2-sites`: discover accessible P2s
 - `wpcom` provider, `posts-text`: read posts/pages from a P2
-- `wpcom` provider, `content-authoring`: list, read, create, or update posts on an existing site after confirmation for writes
+- `wpcom` provider, `content-authoring`: list/read pages and posts; create the initial Brainstem page; create or update ordinary memory content after confirmation
 - `wpcom` provider, `get-blog-report-card`: inspect site metadata when normal P2 discovery fails
 - `wpcom` provider, `site-activity-log`: inspect recent site activity when confirming newly created sites
 
 ### 7. Create the Brainstem Page
 
-Only prepare the Brainstem after one of these is true:
+Create and publish the Brainstem after this is true:
 
 - the P2 exists and the user provided its URL
+
+Only prepare the Brainstem without publishing when one of these is true:
+
 - the user explicitly asks to see the Brainstem before creating the P2
 - the user asks for a template they can paste manually
 
-The default recommendation is to create a published page titled `Brainstem` with slug `brainstem`. Ask directly:
+The default action is to create a published page titled `Brainstem` with slug `brainstem`.
 
-```markdown
-Create and publish the Brainstem page now?
-```
-
-If the user says yes, this is explicit publish confirmation for the initial Brainstem page.
-
-If the P2 exists and the user wants the agent to create the Brainstem page:
+When the P2 exists and `Brainstem` is missing:
 
 1. State exactly which P2 will be changed.
-2. State that the agent will create a `Brainstem` page.
-3. Recommend publishing it now so future agents can find the canonical loading instructions.
-4. Ask for confirmation before creating or publishing.
-5. If the user confirms publishing, use `content-authoring` with `pages.create`, `status: publish`, title `Brainstem`, and slug `brainstem`.
-6. If the user asks to review first, create it as a draft page instead.
-7. Include `user_confirmed` in the write parameters.
-8. Report the edit and view/preview links returned by the tool.
+2. Create a `Brainstem` page with `content-authoring`, `pages.create`, `status: publish`, title `Brainstem`, and slug `brainstem`.
+3. Include `user_confirmed` with a concise note such as `User asked to initialize this P2 brain; Brainstem is missing.`
+4. Report the edit and view links returned by the tool.
 
 If a `Brainstem` page already exists:
 
@@ -214,7 +208,9 @@ If a `Brainstem` page already exists:
 3. Ask for confirmation.
 4. Use `pages.update` after confirmation.
 
-If write tools are unavailable, give the Brainstem draft in chat and ask the user to create a page named `Brainstem`.
+If the user explicitly asks to review first, show the Brainstem content in chat and ask whether to publish it.
+
+If write tools are unavailable, give the Brainstem content in chat and ask the user to create a published page named `Brainstem`.
 
 Use this Brainstem shape:
 
@@ -227,7 +223,7 @@ Owner: <owner>
 Audience: <private/collaborators/team>
 P2 URL: <URL>
 Initialized: <YYYY-MM-DD>
-Default write behavior: Publish this Brainstem after setup confirmation; draft ordinary memories before publishing
+Default write behavior: Publish the Brainstem during setup; draft ordinary memories before publishing
 
 ## Purpose
 
@@ -308,8 +304,8 @@ Do not include the Brainstem in this first response unless requested.
 For a request that includes a P2 URL/domain/blog ID, respond with:
 
 1. **Verification**: reachable site, blog ID if available, privacy, owner, and relevant stickers
-2. **Brainstem**: found or missing
-3. **Next step**: create/publish Brainstem, update existing Brainstem, or report that the brain is ready
+2. **Brainstem**: found, created, or unable to create
+3. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
 
 For a verification request, respond with:
 
