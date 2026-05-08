@@ -1,0 +1,4 @@
+interface:
+  display_name: "P2 Brain Init"
+  short_description: "Set up a new P2 brain for an agent."
+  default_prompt: "Help me initialize a new P2 brain."
