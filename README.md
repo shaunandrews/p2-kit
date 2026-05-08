@@ -24,6 +24,7 @@ A brain is a P2 with a protocol.
 At minimum, a brain should have:
 
 - a **Brainstem** page, written as normal WordPress blocks, that explains the brain's purpose, owner, scope, rules, and indexes
+- a local **`P2-BRAIN.md` pointer** in each project that should use the brain
 - **memory posts** for decisions, preferences, project state, artifacts, meeting notes, and unresolved questions
 - **summaries** that compact recent activity into useful working context
 - **source links** back to Slack, Linear, GitHub, Zendesk, P2s, files, screenshots, or other evidence
@@ -34,6 +35,8 @@ Agents can then be told:
 > Use this P2 as your brain.
 
 The agent loads the Brainstem, searches relevant posts, builds a working-memory summary, performs the task, and writes back useful new context.
+
+For project work, the local `P2-BRAIN.md` file is the discovery hook. It tells an agent which hosted brain to load without requiring the user to paste the P2 URL into every session.
 
 ## Brain Types
 
@@ -68,6 +71,7 @@ Suggested setup flow:
 5. Add the intended human owner and any collaborators.
 6. Give the agent the P2 URL.
 7. The agent verifies access and creates the initial published `Brainstem` page.
+8. The agent writes a local `P2-BRAIN.md` pointer file in the current project.
 
 For a first version, a skill can help by opening the MC tool for the user, preparing the recommended site name and form values, then verifying the created P2 and publishing the initial Brainstem once the user provides the URL.
 
@@ -85,9 +89,11 @@ The first version should be skills-first. Skills define the behavior and convent
    - Recommend a brain name, URL, privacy posture, and owner/collaborators.
    - Accept an existing P2 URL and skip the setup flow.
    - Create and publish the initial `Brainstem` page as WordPress blocks when it is missing.
+   - Save a local `P2-BRAIN.md` pointer file for future agents.
    - After the user creates the P2, verify access and load the Brainstem.
 
 1. **`p2-brain-load`**
+   - Read local `P2-BRAIN.md` when present to discover the default brain.
    - Given a P2 brain URL, load the Brainstem.
    - Identify active indexes and recent summaries.
    - Search task-relevant memory.
@@ -175,6 +181,33 @@ Rules:
 - Ask before publishing to shared P2s.
 ```
 
+## Project Brain Pointer
+
+Projects that use a P2 brain should include a small `P2-BRAIN.md` file at the project root. It should contain only the brain pointer and operating instructions, not private memory content.
+
+```markdown
+# P2 Brain
+
+This project uses a P2 as portable agent memory.
+
+- Brain: Shaun's Brain
+- Brain URL: https://shaunsbrain.wordpress.com/
+- Brainstem: https://shaunsbrain.wordpress.com/brainstem/
+- Project: p2-kit
+- Scope: p2-kit project memory, decisions, preferences, and handoffs
+- Owner: Shaun Andrews
+- Audience: Private - Shaun only
+- Last verified: 2026-05-08
+
+## Agent Instructions
+
+1. Load the Brainstem before substantive work when project context, prior decisions, or owner preferences may matter.
+2. Search the brain before assuming important context is missing.
+3. Use the brain when the user asks to remember, save, hand off, continue, or explain prior decisions.
+4. Draft ordinary memories before publishing unless the user explicitly asks to publish.
+5. Cite source links and mark assumptions, inferences, and stale context.
+```
+
 ## Safety and Hygiene
 
 The default behavior should be conservative:
@@ -198,10 +231,11 @@ The practical starting point is to define the protocol before building many work
 3. Create a sample personal Brainstem page.
 4. Create a sample project Brainstem page.
 5. Create one private P2 manually through the MC P2 tool.
-6. Write `p2-brain-load`.
-7. Implement `p2-brain-write` with drafts-only behavior.
-8. Implement `p2-brain-handoff`.
-9. Test the flow against one private P2:
+6. Add a `P2-BRAIN.md` pointer to one project.
+7. Write `p2-brain-load`.
+8. Implement `p2-brain-write` with drafts-only behavior.
+9. Implement `p2-brain-handoff`.
+10. Test the flow against one private P2:
    - load the brain
    - ask a task-specific question
    - write a memory

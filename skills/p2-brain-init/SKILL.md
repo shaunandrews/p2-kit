@@ -1,6 +1,6 @@
 ---
 name: p2-brain-init
-description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; provides an existing P2 URL to initialize or verify; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brainstem page after the P2 exists; or has created a P2 and wants the agent to verify access and prepare it for use.
+description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; provides an existing P2 URL to initialize or verify; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brainstem page after the P2 exists; wants a local P2-BRAIN.md project pointer; or has created a P2 and wants the agent to verify access and prepare it for use.
 ---
 
 # P2 Brain Init
@@ -24,6 +24,7 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - Write the Brainstem to WordPress as serialized core block HTML, not raw Markdown.
 - When reading an existing Brainstem, use plaintext or rendered content for reasoning; do not carry raw block comments in working context.
 - When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
+- After the Brainstem exists, create a local `P2-BRAIN.md` pointer file when working in a writable project.
 - Do not pause with a yes/no publish question before creating the initial Brainstem.
 - For ordinary memory writes after setup, draft by default unless the user explicitly asks to publish.
 - Do not publish or update ordinary memory content without explicit user confirmation.
@@ -53,6 +54,7 @@ If a URL/domain/blog ID is provided:
 3. Go directly to **Verify the Brain P2**.
 4. After verification, look for `Brainstem`.
 5. If `Brainstem` is missing, create and publish it.
+6. Create or update the local `P2-BRAIN.md` pointer file if the current project is writable.
 
 Do not ask what name or slug the P2 should use when a URL already exists. Infer name, owner, privacy, and type from site metadata where available.
 
@@ -173,7 +175,8 @@ When the request includes a P2 URL/domain/blog ID, or after the user returns wit
 5. Look for a page titled `Brainstem`.
 6. If found, summarize the loaded brain profile and note any missing Brainstem fields.
 7. If missing and the site is reachable, create and publish the Brainstem page.
-8. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
+8. After the Brainstem exists, create or update the local `P2-BRAIN.md` pointer file.
+9. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
 
 Useful `context-a8c` operations when available:
 
@@ -333,6 +336,47 @@ When writing ordinary memories to this brain:
 - Flag uncertain or inferred information.
 ```
 
+### 8. Create the Project Brain Pointer
+
+After the Brainstem exists, create a concise `P2-BRAIN.md` file in the project root when filesystem tools are available and the project is writable. This file lets future agents discover the right brain without the user repeating the URL.
+
+Find the project root by using the git repository root when available; otherwise use the current working directory. Do not write outside the active project unless the user explicitly asks.
+
+If `P2-BRAIN.md` does not exist, create it. If it already exists:
+
+1. Read it first.
+2. If it points to the same brain, leave it alone unless important verified metadata is missing.
+3. If it points to a different brain, ask before replacing it.
+
+If filesystem writes are unavailable, show the `P2-BRAIN.md` content in chat and tell the user where it should go.
+
+Do not store secrets, credentials, private memory content, or copied source conversations in `P2-BRAIN.md`. Store only the pointer and usage instructions.
+
+Use this shape:
+
+```markdown
+# P2 Brain
+
+This project uses a P2 as portable agent memory.
+
+- Brain: <brain name>
+- Brain URL: <brain URL>
+- Brainstem: <brainstem URL>
+- Project: <project name>
+- Scope: <what this project should use the brain for>
+- Owner: <owner>
+- Audience: <private/collaborators/team>
+- Last verified: <YYYY-MM-DD>
+
+## Agent Instructions
+
+1. Load the Brainstem before substantive work when project context, prior decisions, or owner preferences may matter.
+2. Search the brain before assuming important context is missing.
+3. Use the brain when the user asks to remember, save, hand off, continue, or explain prior decisions.
+4. Draft ordinary memories before publishing unless the user explicitly asks to publish.
+5. Cite source links and mark assumptions, inferences, and stale context.
+```
+
 ## Output Shapes
 
 For a new setup request, respond with:
@@ -347,7 +391,8 @@ For a request that includes a P2 URL/domain/blog ID, respond with:
 
 1. **Verification**: reachable site, blog ID if available, privacy, owner, and relevant stickers
 2. **Brainstem**: found, created, or unable to create
-3. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
+3. **Project file**: `P2-BRAIN.md` created, already present, updated, or skipped
+4. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
 
 For a verification request, respond with:
 
