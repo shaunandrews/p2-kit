@@ -152,7 +152,7 @@ P2 is hosted, permissioned, human-readable, linkable, and already part of the ex
 
 ## Brainstem Shape
 
-Every brain should have a canonical Brainstem page. The Brainstem tells an agent how to use the brain, and should be stored as normal WordPress blocks rather than raw Markdown.
+Every brain should have a canonical Brainstem page. The Brainstem tells an agent how to use the brain, and should be stored as normal WordPress blocks rather than raw Markdown. Agents should read its rendered or plaintext form so block markup does not become working-memory noise.
 
 ```markdown
 # Brainstem

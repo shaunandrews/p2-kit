@@ -22,6 +22,7 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
 - The initial `Brainstem` should be a page, not a post.
 - Write the Brainstem to WordPress as serialized core block HTML, not raw Markdown.
+- When reading an existing Brainstem, use plaintext or rendered content for reasoning; do not carry raw block comments in working context.
 - When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
 - Do not pause with a yes/no publish question before creating the initial Brainstem.
 - For ordinary memory writes after setup, draft by default unless the user explicitly asks to publish.
@@ -222,6 +223,7 @@ Do:
 - Use `<strong>` for field labels and `<code>` for memory type labels.
 - Escape HTML special characters in user-provided values.
 - Keep the block markup concise. The extra markup costs a few hundred tokens on this setup page, but it prevents flattened or visibly raw Markdown.
+- When reading the page later, strip block comments/HTML or use plaintext output before summarizing the brain profile.
 
 Do not:
 
