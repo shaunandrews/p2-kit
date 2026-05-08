@@ -21,8 +21,8 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
 - Draft before publishing. Do not publish or update P2 content without explicit user confirmation.
 - Prefer private access for personal brains and early project brains.
-- Prefer MC `Project` type for agent brains, even private personal work brains, because workspace P2 read/search tools can see it.
-- Do not recommend MC `Personal` type unless the user explicitly wants a Personal P2 and accepts the read/search limitations.
+- Prefer MC `Personal` type for a private personal brain, and use direct site-scoped WordPress.com/content-authoring tools to access it.
+- Do not treat absence from `p2-sites` or rejection by `posts-text` as proof that a Personal P2 is inaccessible.
 - Do not invent details about the user's work, teams, projects, tools, or preferences.
 - Do not copy large private conversations into the manifest. Link sources or summarize instead.
 - Mark assumptions and inferred context clearly.
@@ -103,7 +103,7 @@ Open: https://mc.a8c.com/tools/p2/
 - P2 name: <subdomain slug>
 - P2 description: <one-line description>
 - Business unit: None, unless this belongs to a specific business unit
-- P2 type: <Project/Team/Documentation/Personal>
+- P2 type: <Personal/Project/Team/Documentation>
 - Non-Automattician access: unchecked, unless external collaborators need access
 - Internal AI Access: enable if this brain should be usable by internal AI systems; leave disabled for highly sensitive memory
 - AI summaries: optional; enable only if useful for the brain's audience
@@ -117,8 +117,8 @@ Field guidance:
 - **P2 name:** Use the short URL slug. If MC normalizes the slug, accept the normalized value and use it later as the P2 URL.
 - **P2 description:** Keep it one line, e.g. `Portable memory for Shaun's agent sessions.`
 - **Business unit:** Use `None` unless the user knows the correct business unit.
-- **P2 type:** Use `Project` for most agent brains, including a private personal work brain. Use `Team` for a shared team brain. Use `Documentation` only when knowledge-base behavior is desired.
-- **Personal type caveat:** Avoid `Personal` for the default agent-brain flow. MC notes that Personal P2s are not part of the A8C workspace and x-posting to/from A8C P2s is not possible. In practice, `p2-sites` and `posts-text` may not return Personal P2s, so future brain loading/search may need `content-authoring` instead of normal P2 tools. If the user still wants `Personal`, clearly state this tradeoff before proceeding.
+- **P2 type:** Use `Personal` for a private personal brain, `Project` for a project brain or when workspace P2 behavior matters, `Team` for a shared team brain, and `Documentation` only when knowledge-base behavior is desired.
+- **Personal type caveat:** Personal P2s are not part of the A8C workspace and x-posting to/from A8C P2s is not possible. Some workspace-specific tools such as `p2-sites` and `posts-text` may not discover them. That is expected; use direct site-scoped tools such as `content-authoring`, `site-activity-log`, and `get-blog-report-card` instead.
 - **Internal AI Access:** For an agent brain, this usually needs to be enabled. If the user wants very sensitive memory, discuss the tradeoff before recommending it.
 - **AI summaries:** Useful for shared or project brains, less important for a brand-new personal brain.
 - **P2 users:** Keep narrow at creation time. More users can be added later.
@@ -140,14 +140,13 @@ This keeps the first interaction focused on completing the form.
 After the user provides a P2 URL:
 
 1. If `context-a8c` is available, load the `wpcom` provider.
-2. Use `p2-sites` or `posts-text` to verify the user has access to the P2.
-3. If `p2-sites` and `posts-text` do not return the P2, try a site-specific read path such as `content-authoring` list/get or a blog report card, if available.
-4. If the P2 is marked as a Personal P2, explain the limitation: normal workspace P2 tools may not discover or read it, but `content-authoring` may still create/list/read posts by URL or blog ID.
-5. For a Personal P2, ask whether the user wants to continue with the content-authoring-only path or recreate the brain as a `Project` P2 for better workspace tool compatibility.
-6. Look for a post or page titled `Brain Manifest`.
-7. If found, summarize the loaded brain profile and note any missing manifest fields.
-8. If missing, offer to draft or create the manifest.
-9. Do not proceed as if the brain is ready until the manifest exists or the user explicitly asks to continue without it.
+2. Use `get-blog-report-card` with the P2 URL to confirm the blog exists, identify the blog ID, owner, privacy, and stickers.
+3. Use `content-authoring` with the P2 URL or blog ID to list posts and pages. Check both `posts.list` and `pages.list`.
+4. Use `p2-sites` or `posts-text` only as optional workspace-P2 helpers. If they reject a Personal P2 as "not an Automattic P2" or do not return it, continue with `content-authoring`.
+5. Look for a post or page titled `Brain Manifest`.
+6. If found, summarize the loaded brain profile and note any missing manifest fields.
+7. If missing, offer to draft or create the manifest.
+8. Do not proceed as if the brain is ready until the manifest exists or the user explicitly asks to continue without it.
 
 Useful `context-a8c` operations when available:
 
@@ -155,6 +154,7 @@ Useful `context-a8c` operations when available:
 - `wpcom` provider, `posts-text`: read posts/pages from a P2
 - `wpcom` provider, `content-authoring`: list, read, create, or update posts on an existing site after confirmation for writes
 - `wpcom` provider, `get-blog-report-card`: inspect site metadata when normal P2 discovery fails
+- `wpcom` provider, `site-activity-log`: inspect recent site activity when confirming newly created sites
 
 ### 6. Draft or Create the Brain Manifest
 
