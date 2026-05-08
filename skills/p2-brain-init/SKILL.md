@@ -57,6 +57,15 @@ Use the heading `Names and slugs` when offering options.
 
 Offer no more than three options. Put the recommended option first. Keep rationale to one short phrase per option.
 
+For a personal brain named after a person, use a possessive title:
+
+- Prefer `Shaun's Brain` for a private first-name personal brain.
+- Use `Shaun Andrews' Brain` when the full name is helpful for disambiguation.
+- If the name does not end in `s`, use `'s`, e.g. `Jane's Brain`.
+- If the name ends in `s`, use an apostrophe after the `s`, e.g. `Andrews' Brain`.
+- Keep slugs lowercase and punctuation-free, e.g. `shauns-brain` or `shaunandrews-brain`.
+- Avoid awkward noun stacks like `Shaun Andrews Brain`.
+
 Example:
 
 ```markdown
@@ -64,14 +73,14 @@ Example:
 
 Recommended:
 
-1. Shaun Andrews Brain / shaunandrews-brain
+1. Shaun's Brain / shauns-brain
    Clear and personal.
 
 Alternatives:
 
-2. Shaun Brain / shaun-brain
-   Shorter.
-3. Shaun Memory / shaun-memory
+2. Shaun Andrews' Brain / shaunandrews-brain
+   Useful if the full name helps disambiguate.
+3. Shaun's Memory / shauns-memory
    More generic.
 ```
 
@@ -102,7 +111,7 @@ Open: https://mc.a8c.com/tools/p2/
 
 Field guidance:
 
-- **P2 title:** Use the visible brain name, e.g. `Shaun Andrews Brain` or `p2-kit Brain`.
+- **P2 title:** Use the visible brain name. For personal brains, use a possessive title such as `Shaun's Brain` or `Shaun Andrews' Brain`. For project brains, use a project title such as `p2-kit Brain`.
 - **P2 name:** Use the short URL slug. If MC normalizes the slug, accept the normalized value and use it later as the P2 URL.
 - **P2 description:** Keep it one line, e.g. `Portable memory for Shaun's agent sessions.`
 - **Business unit:** Use `None` unless the user knows the correct business unit.
