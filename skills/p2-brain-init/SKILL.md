@@ -1,13 +1,13 @@
 ---
 name: p2-brain-init
-description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants an initial Brain Manifest post; or has created a P2 and wants the agent to verify access and prepare it for use.
+description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brain Manifest post after the P2 exists; or has created a P2 and wants the agent to verify access and prepare it for use.
 ---
 
 # P2 Brain Init
 
 ## Purpose
 
-Guide a human through creating a new P2 brain, then produce and verify the initial `Brain Manifest`.
+Guide a human through creating a new P2 brain, then verify it and prepare the initial `Brain Manifest`.
 
 Do not silently provision a new P2. Current agent-accessible `context-a8c` tools can work with existing P2s, but do not expose a normal tool for creating a brand-new P2. Treat P2 creation as an explicit human-in-the-loop setup step through the MC P2 tool:
 
@@ -15,9 +15,13 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 
 ## Operating Rules
 
+- Keep the setup phase short and focused. The user is filling out a form and may have questions.
+- Do not generate the full manifest during the initial MC setup unless the user explicitly asks for it.
+- Stop after giving form values and ask the user to return with the created P2 URL.
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
 - Draft before publishing. Do not publish or update P2 content without explicit user confirmation.
-- Prefer private P2s for personal brains and early project brains.
+- Prefer private access for personal brains and early project brains.
+- Do not invent details about the user's work, teams, projects, tools, or preferences.
 - Do not copy large private conversations into the manifest. Link sources or summarize instead.
 - Mark assumptions and inferred context clearly.
 - Do not claim a P2 was created, configured, or verified unless you actually verified it.
@@ -25,48 +29,138 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 
 ## Workflow
 
-### 1. Identify the Brain Profile
+### 1. Identify the Minimum Setup
 
-Gather only the details needed to draft a useful setup brief. If the user already provided enough context, proceed with reasonable defaults and label them as assumptions.
+Gather only what is needed to complete the MC form.
 
 Required:
 
-- **Brain name:** human-readable name, such as `Shaun Work Brain` or `p2-kit Project Brain`
-- **Brain type:** `personal`, `project`, `team`, `design`, `review`, `incident`, or another concise type
-- **Purpose:** what this brain should help agents remember and do
+- **Brain purpose:** personal work memory, project memory, team memory, design memory, review memory, etc.
+- **Access:** just the user, named collaborators, a team, or broader group
+
+Useful if already known:
+
 - **Owner:** primary human owner
-- **Audience:** private, named collaborators, team, or broader group
+- **Preferred name or slug**
+- **Sensitivity:** whether this brain may hold HR, performance, customer, unreleased, or private-team context
+
+If key information is missing, ask at most two concise questions. Good questions:
+
+- "What kind of brain are you setting up?"
+- "Who should have access?"
+
+If the user already answered those, proceed with reasonable defaults and label them as assumptions.
+
+### 2. Recommend Names and Slugs
+
+Use the heading `Names and slugs` when offering options.
+
+Offer no more than three options. Put the recommended option first. Keep rationale to one short phrase per option.
+
+Example:
+
+```markdown
+## Names and slugs
 
 Recommended:
 
-- **Proposed URL slug:** lowercase, short, memorable, e.g. `shaun-brain`, `p2-kit-brain`
-- **Default write behavior:** usually `draft before publishing`
-- **Allowed memory types:** decisions, project logs, preferences, artifacts, source summaries, handoffs, review evidence
-- **Sensitive areas:** HR, performance, customer data, private team context, credentials, unreleased plans
-- **Source systems:** P2, Slack, GitHub, Linear, Zendesk, local files, screenshots
+1. Shaun Andrews Brain / shaunandrews-brain
+   Clear and personal.
 
-If missing information blocks progress, ask at most three concise questions. Otherwise continue.
+Alternatives:
 
-### 2. Produce the Setup Brief
+2. Shaun Brain / shaun-brain
+   Shorter.
+3. Shaun Memory / shaun-memory
+   More generic.
+```
 
-Give the user a short setup brief they can follow in MC:
+If the user chooses or types a custom value, use that value and move on.
 
-1. Open the MC P2 tool: `https://mc.a8c.com/tools/p2/`
-2. Create a new internal P2.
-3. Use the recommended name and slug.
-4. Keep it private unless the stated audience requires sharing.
-5. Add the owner and collaborators.
-6. Create a first post titled `Brain Manifest`.
-7. Paste the generated manifest.
-8. Return with the P2 URL so the agent can verify and load it.
+### 3. Map to the MC P2 Form
 
-For external/non-Automattician access, tell the user to use the MC tool's external-user option if appropriate, but call out that this changes the privacy posture.
-
-### 3. Generate the Brain Manifest
-
-Generate a complete first-post draft titled `Brain Manifest`. Keep it clear enough for humans and structured enough for future agents.
+Format setup guidance around the actual MC form fields. Keep it practical.
 
 Use this shape:
+
+```markdown
+## MC form values
+
+Open: https://mc.a8c.com/tools/p2/
+
+- P2 title: <human readable title>
+- P2 name: <subdomain slug>
+- P2 description: <one-line description>
+- Business unit: None, unless this belongs to a specific business unit
+- P2 type: <Personal/Project/Team/Documentation>
+- Non-Automattician access: unchecked, unless external collaborators need access
+- Internal AI Access: enable if this brain should be usable by internal AI systems; leave disabled for highly sensitive memory
+- AI summaries: optional; enable only if useful for the brain's audience
+- P2 users: add only the owner and intended collaborators
+- Add subteam members: unchecked unless adding a team group and all subteam members should join
+```
+
+Field guidance:
+
+- **P2 title:** Use the visible brain name, e.g. `Shaun Andrews Brain` or `p2-kit Brain`.
+- **P2 name:** Use the short URL slug. If MC normalizes the slug, accept the normalized value and use it later as the P2 URL.
+- **P2 description:** Keep it one line, e.g. `Portable memory for Shaun's agent sessions.`
+- **Business unit:** Use `None` unless the user knows the correct business unit.
+- **P2 type:** Use `Personal` for private work notes, `Project` for a project brain, `Team` for a shared team brain, and `Documentation` only when knowledge-base behavior is desired.
+- **Personal type caveat:** MC notes that Personal P2s are not part of the A8C workspace and x-posting to/from A8C P2s is not possible. Mention this when recommending `Personal`.
+- **Internal AI Access:** For an agent brain, this usually needs to be enabled. If the user wants very sensitive memory, discuss the tradeoff before recommending it.
+- **AI summaries:** Useful for shared or project brains, less important for a brand-new personal brain.
+- **P2 users:** Keep narrow at creation time. More users can be added later.
+
+### 4. Stop and Wait
+
+After giving MC form values, stop. Do not include a full `Brain Manifest` draft yet.
+
+End with:
+
+```markdown
+Create the P2 with those values, then send me the P2 URL. I will verify access and draft the Brain Manifest as the first post.
+```
+
+This keeps the first interaction focused on completing the form.
+
+### 5. Verify the Brain P2
+
+After the user provides a P2 URL:
+
+1. If `context-a8c` is available, load the `wpcom` provider.
+2. Use `p2-sites` or `posts-text` to verify the user has access to the P2.
+3. Look for a post or page titled `Brain Manifest`.
+4. If found, summarize the loaded brain profile and note any missing manifest fields.
+5. If missing, offer to draft or create the manifest.
+6. Do not proceed as if the brain is ready until the manifest exists or the user explicitly asks to continue without it.
+
+Useful `context-a8c` operations when available:
+
+- `wpcom` provider, `p2-sites`: discover accessible P2s
+- `wpcom` provider, `posts-text`: read posts/pages from a P2
+- `wpcom` provider, `content-authoring`: create or update manifest posts after confirmation
+
+### 6. Draft or Create the Brain Manifest
+
+Only draft the manifest after one of these is true:
+
+- the P2 exists and the user provided its URL
+- the user explicitly asks to see the manifest before creating the P2
+- the user asks for a template they can paste manually
+
+If the P2 exists and the user wants the agent to create the manifest:
+
+1. State exactly which P2 will be changed.
+2. State that the agent will create a `Brain Manifest` post as a draft unless the user explicitly requests publish.
+3. Ask for confirmation.
+4. If `context-a8c` is available, use the `wpcom` provider's `content-authoring` tool with `posts.create`.
+5. Include `user_confirmed` in the write parameters.
+6. Report the edit and preview links returned by the tool.
+
+If write tools are unavailable, give the manifest draft in chat and ask the user to paste it into the first P2 post.
+
+Use this manifest shape:
 
 ```markdown
 # Brain Manifest
@@ -75,7 +169,7 @@ Brain name: <name>
 Brain type: <type>
 Owner: <owner>
 Audience: <private/collaborators/team>
-P2 URL: <pending or URL>
+P2 URL: <URL>
 Initialized: <YYYY-MM-DD>
 Default write behavior: Draft before publishing
 
@@ -143,60 +237,22 @@ When writing to this brain:
 - Do not store secrets.
 - Summarize sensitive source material instead of copying it.
 - Flag uncertain or inferred information.
-
-## Bootstrap Tasks
-
-- Create initial index posts.
-- Add the first project log.
-- Add owner preferences as they become clear.
-- Create a handoff after meaningful setup work.
 ```
 
-Adapt section names to the user context, but keep the core loading, writing, memory type, and safety instructions.
+## Output Shapes
 
-### 4. Optional: Create the Manifest Post
+For a new setup request, respond with:
 
-If the P2 already exists and the user wants the agent to create the manifest:
+1. **Names and slugs** if the user has not already chosen one
+2. **MC form values**
+3. **Next step** asking the user to create the P2 and return with the URL
 
-1. State exactly which P2 will be changed.
-2. State that the agent will create a `Brain Manifest` post as a draft unless the user explicitly requests publish.
-3. Ask for confirmation.
-4. If `context-a8c` is available, use the `wpcom` provider's `content-authoring` tool with `posts.create`.
-5. Include `user_confirmed` in the write parameters.
-6. Report the edit and preview links returned by the tool.
-
-If write tools are unavailable, give the manifest draft in chat and ask the user to paste it into the first P2 post.
-
-### 5. Verify the Brain P2
-
-After the user provides a P2 URL:
-
-1. If `context-a8c` is available, load the `wpcom` provider.
-2. Use `p2-sites` or `posts-text` to verify the user has access to the P2.
-3. Look for a post or page titled `Brain Manifest`.
-4. If found, summarize the loaded brain profile and note any missing manifest fields.
-5. If missing, offer to draft or create the manifest.
-6. Do not proceed as if the brain is ready until the manifest exists or the user explicitly asks to continue without it.
-
-Useful `context-a8c` operations when available:
-
-- `wpcom` provider, `p2-sites`: discover accessible P2s
-- `wpcom` provider, `posts-text`: read posts/pages from a P2
-- `wpcom` provider, `content-authoring`: create or update manifest posts after confirmation
-
-## Output Shape
-
-For a normal setup request, respond with:
-
-1. **Recommendation:** brain name, slug, privacy, owner/collaborators
-2. **Setup Steps:** concise MC instructions
-3. **Brain Manifest Draft:** ready to paste into P2
-4. **Next Step:** ask the user to return with the P2 URL for verification
+Do not include the manifest in this first response unless requested.
 
 For a verification request, respond with:
 
 1. whether the P2 was reachable
 2. whether the manifest was found
-3. the loaded brain profile
+3. the loaded brain profile, if available
 4. missing or risky setup items
 5. the next action needed to make the brain usable
