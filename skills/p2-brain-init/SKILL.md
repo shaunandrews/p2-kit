@@ -21,6 +21,7 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - Stop after giving form values and ask the user to return with the created P2 URL.
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
 - The initial `Brainstem` should be a page, not a post.
+- Write the Brainstem to WordPress as serialized core block HTML, not raw Markdown.
 - When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
 - Do not pause with a yes/no publish question before creating the initial Brainstem.
 - For ordinary memory writes after setup, draft by default unless the user explicitly asks to publish.
@@ -197,7 +198,7 @@ The default action is to create a published page titled `Brainstem` with slug `b
 When the P2 exists and `Brainstem` is missing:
 
 1. State exactly which P2 will be changed.
-2. Create a `Brainstem` page with `content-authoring`, `pages.create`, `status: publish`, title `Brainstem`, and slug `brainstem`.
+2. Create a `Brainstem` page with `content-authoring`, `pages.create`, `status: publish`, title `Brainstem`, slug `brainstem`, and WordPress block HTML in `content.raw`.
 3. Include `user_confirmed` with a concise note such as `User asked to initialize this P2 brain; Brainstem is missing.`
 4. Report the edit and view links returned by the tool.
 
@@ -206,13 +207,52 @@ If a `Brainstem` page already exists:
 1. Fetch it first.
 2. Summarize what would change.
 3. Ask for confirmation.
-4. Use `pages.update` after confirmation.
+4. Use `pages.update` with WordPress block HTML after confirmation.
 
 If the user explicitly asks to review first, show the Brainstem content in chat and ask whether to publish it.
 
 If write tools are unavailable, give the Brainstem content in chat and ask the user to create a published page named `Brainstem`.
 
-Use this Brainstem shape:
+Use the Brainstem shape below as the semantic source. When writing with `content-authoring`, convert it to serialized WordPress block HTML before passing it as `content.raw`.
+
+Do:
+
+- Set the page title to `Brainstem`; do not include `# Brainstem` inside the page content.
+- Use core blocks only: paragraphs, headings, lists, and list items.
+- Use `<strong>` for field labels and `<code>` for memory type labels.
+- Escape HTML special characters in user-provided values.
+- Keep the block markup concise. The extra markup costs a few hundred tokens on this setup page, but it prevents flattened or visibly raw Markdown.
+
+Do not:
+
+- Pass raw Markdown to `pages.create` or `pages.update`.
+- Mix Markdown headings or Markdown bullets into block HTML.
+- Include a duplicate top-level `Brainstem` heading inside the content body.
+
+Minimal block pattern:
+
+```html
+<!-- wp:paragraph -->
+<p><strong>Brain name:</strong> Shaun's Brain</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">Purpose</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Portable memory for Shaun's agent sessions.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul>
+<!-- wp:list-item --><li>preferences and working style</li><!-- /wp:list-item -->
+<!-- wp:list-item --><li>decision records with rationale</li><!-- /wp:list-item -->
+</ul>
+<!-- /wp:list -->
+```
+
+The semantic Brainstem shape:
 
 ```markdown
 # Brainstem

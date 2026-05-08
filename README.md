@@ -23,7 +23,7 @@ A brain is a P2 with a protocol.
 
 At minimum, a brain should have:
 
-- a **Brainstem** page that explains the brain's purpose, owner, scope, rules, and indexes
+- a **Brainstem** page, written as normal WordPress blocks, that explains the brain's purpose, owner, scope, rules, and indexes
 - **memory posts** for decisions, preferences, project state, artifacts, meeting notes, and unresolved questions
 - **summaries** that compact recent activity into useful working context
 - **source links** back to Slack, Linear, GitHub, Zendesk, P2s, files, screenshots, or other evidence
@@ -84,7 +84,7 @@ The first version should be skills-first. Skills define the behavior and convent
    - Open or link to the MC P2 tool.
    - Recommend a brain name, URL, privacy posture, and owner/collaborators.
    - Accept an existing P2 URL and skip the setup flow.
-   - Create and publish the initial `Brainstem` page when it is missing.
+   - Create and publish the initial `Brainstem` page as WordPress blocks when it is missing.
    - After the user creates the P2, verify access and load the Brainstem.
 
 1. **`p2-brain-load`**
@@ -152,7 +152,7 @@ P2 is hosted, permissioned, human-readable, linkable, and already part of the ex
 
 ## Brainstem Shape
 
-Every brain should have a canonical Brainstem page. The Brainstem tells an agent how to use the brain.
+Every brain should have a canonical Brainstem page. The Brainstem tells an agent how to use the brain, and should be stored as normal WordPress blocks rather than raw Markdown.
 
 ```markdown
 # Brainstem
