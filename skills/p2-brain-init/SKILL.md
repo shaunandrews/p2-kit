@@ -1,6 +1,6 @@
 ---
 name: p2-brain-init
-description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brainstem page after the P2 exists; or has created a P2 and wants the agent to verify access and prepare it for use.
+description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; provides an existing P2 URL to initialize or verify; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brainstem page after the P2 exists; or has created a P2 and wants the agent to verify access and prepare it for use.
 ---
 
 # P2 Brain Init
@@ -16,6 +16,7 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 ## Operating Rules
 
 - Keep the setup phase short and focused. The user is filling out a form and may have questions.
+- If the user's request includes a P2 URL or WordPress.com domain, skip the MC setup flow and start with verification.
 - Do not generate the full Brainstem during the initial MC setup unless the user explicitly asks for it.
 - Stop after giving form values and ask the user to return with the created P2 URL.
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
@@ -34,7 +35,27 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 
 ## Workflow
 
-### 1. Identify the Minimum Setup
+### 1. Route the Request
+
+Check whether the user provided a P2 URL or domain, such as:
+
+- `https://shaunsbrain.wordpress.com/`
+- `shaunsbrain.wordpress.com`
+- a WordPress.com blog ID
+
+If a URL/domain/blog ID is provided:
+
+1. Normalize it to a site identifier usable by WordPress.com tools.
+2. Skip the setup questions, name suggestions, and MC form guidance.
+3. Go directly to **Verify the Brain P2**.
+4. After verification, look for `Brainstem`.
+5. If `Brainstem` is missing, offer to create and publish it.
+
+Do not ask what name or slug the P2 should use when a URL already exists. Infer name, owner, privacy, and type from site metadata where available.
+
+If no URL/domain/blog ID is provided, continue with the setup flow below.
+
+### 2. Identify the Minimum Setup
 
 Gather only what is needed to complete the MC form.
 
@@ -56,7 +77,7 @@ If key information is missing, ask at most two concise questions. Good questions
 
 If the user already answered those, proceed with reasonable defaults and label them as assumptions.
 
-### 2. Recommend Names and Slugs
+### 3. Recommend Names and Slugs
 
 Use the heading `Names and slugs` when offering options.
 
@@ -91,7 +112,7 @@ Alternatives:
 
 If the user chooses or types a custom value, use that value and move on.
 
-### 3. Map to the MC P2 Form
+### 4. Map to the MC P2 Form
 
 Format setup guidance around the actual MC form fields. Keep it practical.
 
@@ -126,7 +147,7 @@ Field guidance:
 - **AI summaries:** Useful for shared or project brains, less important for a brand-new personal brain.
 - **P2 users:** Keep narrow at creation time. More users can be added later.
 
-### 4. Stop and Wait
+### 5. Stop and Wait
 
 After giving MC form values, stop. Do not include a full `Brainstem` draft yet.
 
@@ -138,9 +159,9 @@ Create the P2 with those values, then send me the P2 URL. I will verify access a
 
 This keeps the first interaction focused on completing the form.
 
-### 5. Verify the Brain P2
+### 6. Verify the Brain P2
 
-After the user provides a P2 URL:
+When the request includes a P2 URL/domain/blog ID, or after the user returns with a newly created P2 URL:
 
 1. If `context-a8c` is available, load the `wpcom` provider.
 2. Use `get-blog-report-card` with the P2 URL to confirm the blog exists, identify the blog ID, owner, privacy, and stickers.
@@ -159,7 +180,7 @@ Useful `context-a8c` operations when available:
 - `wpcom` provider, `get-blog-report-card`: inspect site metadata when normal P2 discovery fails
 - `wpcom` provider, `site-activity-log`: inspect recent site activity when confirming newly created sites
 
-### 6. Create the Brainstem Page
+### 7. Create the Brainstem Page
 
 Only prepare the Brainstem after one of these is true:
 
@@ -283,6 +304,12 @@ For a new setup request, respond with:
 3. **Next step** asking the user to create the P2 and return with the URL
 
 Do not include the Brainstem in this first response unless requested.
+
+For a request that includes a P2 URL/domain/blog ID, respond with:
+
+1. **Verification**: reachable site, blog ID if available, privacy, owner, and relevant stickers
+2. **Brainstem**: found or missing
+3. **Next step**: create/publish Brainstem, update existing Brainstem, or report that the brain is ready
 
 For a verification request, respond with:
 

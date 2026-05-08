@@ -84,6 +84,7 @@ The first version should be skills-first. Skills define the behavior and convent
    - Explain how to create a new brain P2.
    - Open or link to the MC P2 tool.
    - Recommend a brain name, URL, privacy posture, and owner/collaborators.
+   - Accept an existing P2 URL and skip the setup flow.
    - Generate the initial `Brainstem` page.
    - After the user creates the P2, verify access and load the Brainstem.
 
