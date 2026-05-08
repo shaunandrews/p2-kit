@@ -1,13 +1,13 @@
 ---
 name: p2-brain-init
-description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brain Manifest page after the P2 exists; or has created a P2 and wants the agent to verify access and prepare it for use.
+description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brainstem page after the P2 exists; or has created a P2 and wants the agent to verify access and prepare it for use.
 ---
 
 # P2 Brain Init
 
 ## Purpose
 
-Guide a human through creating a new P2 brain, then verify it and prepare the initial `Brain Manifest`.
+Guide a human through creating a new P2 brain, then verify it and prepare the initial `Brainstem`.
 
 Do not silently provision a new P2. Current agent-accessible `context-a8c` tools can work with existing P2s, but do not expose a normal tool for creating a brand-new P2. Treat P2 creation as an explicit human-in-the-loop setup step through the MC P2 tool:
 
@@ -16,18 +16,18 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 ## Operating Rules
 
 - Keep the setup phase short and focused. The user is filling out a form and may have questions.
-- Do not generate the full manifest during the initial MC setup unless the user explicitly asks for it.
+- Do not generate the full Brainstem during the initial MC setup unless the user explicitly asks for it.
 - Stop after giving form values and ask the user to return with the created P2 URL.
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
-- The initial `Brain Manifest` should be a page, not a post.
-- Recommend publishing the initial manifest page after explicit confirmation; it is canonical setup/configuration, not an ordinary update.
+- The initial `Brainstem` should be a page, not a post.
+- Recommend publishing the initial Brainstem page after explicit confirmation; it is canonical setup/configuration, not an ordinary update.
 - For ordinary memory writes after setup, draft by default unless the user explicitly asks to publish.
 - Do not publish or update P2 content without explicit user confirmation.
 - Prefer private access for personal brains and early project brains.
 - Prefer MC `Personal` type for a private personal brain, and use direct site-scoped WordPress.com/content-authoring tools to access it.
 - Do not treat absence from `p2-sites` or rejection by `posts-text` as proof that a Personal P2 is inaccessible.
 - Do not invent details about the user's work, teams, projects, tools, or preferences.
-- Do not copy large private conversations into the manifest. Link sources or summarize instead.
+- Do not copy large private conversations into the Brainstem. Link sources or summarize instead.
 - Mark assumptions and inferred context clearly.
 - Do not claim a P2 was created, configured, or verified unless you actually verified it.
 - If the user wants the MC tool opened and a browser capability is available, open `https://mc.a8c.com/tools/p2/`. Otherwise provide the link.
@@ -128,12 +128,12 @@ Field guidance:
 
 ### 4. Stop and Wait
 
-After giving MC form values, stop. Do not include a full `Brain Manifest` draft yet.
+After giving MC form values, stop. Do not include a full `Brainstem` draft yet.
 
 End with:
 
 ```markdown
-Create the P2 with those values, then send me the P2 URL. I will verify access and create the Brain Manifest page.
+Create the P2 with those values, then send me the P2 URL. I will verify access and create the Brainstem page.
 ```
 
 This keeps the first interaction focused on completing the form.
@@ -146,10 +146,10 @@ After the user provides a P2 URL:
 2. Use `get-blog-report-card` with the P2 URL to confirm the blog exists, identify the blog ID, owner, privacy, and stickers.
 3. Use `content-authoring` with the P2 URL or blog ID to list pages and posts. Check `pages.list` first, then `posts.list`.
 4. Use `p2-sites` or `posts-text` only as optional workspace-P2 helpers. If they reject a Personal P2 as "not an Automattic P2" or do not return it, continue with `content-authoring`.
-5. Look for a page titled `Brain Manifest`. If a post exists instead, treat it as a legacy/early draft and recommend creating a canonical page.
-6. If found, summarize the loaded brain profile and note any missing manifest fields.
-7. If missing, offer to create and publish the manifest page after confirmation.
-8. Do not proceed as if the brain is ready until the manifest exists or the user explicitly asks to continue without it.
+5. Look for a page titled `Brainstem`. If a `Brain Manifest` page or post exists instead, treat it as legacy naming and recommend renaming or replacing it with the canonical `Brainstem` page.
+6. If found, summarize the loaded brain profile and note any missing Brainstem fields.
+7. If missing, offer to create and publish the Brainstem page after confirmation.
+8. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
 
 Useful `context-a8c` operations when available:
 
@@ -159,46 +159,48 @@ Useful `context-a8c` operations when available:
 - `wpcom` provider, `get-blog-report-card`: inspect site metadata when normal P2 discovery fails
 - `wpcom` provider, `site-activity-log`: inspect recent site activity when confirming newly created sites
 
-### 6. Create the Brain Manifest Page
+### 6. Create the Brainstem Page
 
-Only prepare the manifest after one of these is true:
+Only prepare the Brainstem after one of these is true:
 
 - the P2 exists and the user provided its URL
-- the user explicitly asks to see the manifest before creating the P2
+- the user explicitly asks to see the Brainstem before creating the P2
 - the user asks for a template they can paste manually
 
-The default recommendation is to create a published page titled `Brain Manifest` with slug `brain-manifest`. Ask directly:
+The default recommendation is to create a published page titled `Brainstem` with slug `brainstem`. Ask directly:
 
 ```markdown
-Create and publish the Brain Manifest page now?
+Create and publish the Brainstem page now?
 ```
 
-If the user says yes, this is explicit publish confirmation for the initial manifest page.
+If the user says yes, this is explicit publish confirmation for the initial Brainstem page.
 
-If the P2 exists and the user wants the agent to create the manifest page:
+If the P2 exists and the user wants the agent to create the Brainstem page:
 
 1. State exactly which P2 will be changed.
-2. State that the agent will create a `Brain Manifest` page.
+2. State that the agent will create a `Brainstem` page.
 3. Recommend publishing it now so future agents can find the canonical loading instructions.
 4. Ask for confirmation before creating or publishing.
-5. If the user confirms publishing, use `content-authoring` with `pages.create`, `status: publish`, title `Brain Manifest`, and slug `brain-manifest`.
+5. If the user confirms publishing, use `content-authoring` with `pages.create`, `status: publish`, title `Brainstem`, and slug `brainstem`.
 6. If the user asks to review first, create it as a draft page instead.
 7. Include `user_confirmed` in the write parameters.
 8. Report the edit and view/preview links returned by the tool.
 
-If a `Brain Manifest` page already exists:
+If a `Brainstem` page already exists:
 
 1. Fetch it first.
 2. Summarize what would change.
 3. Ask for confirmation.
 4. Use `pages.update` after confirmation.
 
-If write tools are unavailable, give the manifest draft in chat and ask the user to create a page named `Brain Manifest`.
+If a legacy `Brain Manifest` page or post already exists, offer to rename/update it to `Brainstem` instead of creating a duplicate.
 
-Use this manifest shape:
+If write tools are unavailable, give the Brainstem draft in chat and ask the user to create a page named `Brainstem`.
+
+Use this Brainstem shape:
 
 ```markdown
-# Brain Manifest
+# Brainstem
 
 Brain name: <name>
 Brain type: <type>
@@ -206,7 +208,7 @@ Owner: <owner>
 Audience: <private/collaborators/team>
 P2 URL: <URL>
 Initialized: <YYYY-MM-DD>
-Default write behavior: Publish this manifest after setup confirmation; draft ordinary memories before publishing
+Default write behavior: Publish this Brainstem after setup confirmation; draft ordinary memories before publishing
 
 ## Purpose
 
@@ -230,7 +232,7 @@ This brain should not store:
 
 When using this P2 as a brain:
 
-1. Read this manifest first.
+1. Read the Brainstem first.
 2. Search for task-relevant memory before assuming context is missing.
 3. Prefer recent summaries, active project indexes, and decision records.
 4. Treat older memory as potentially stale unless reaffirmed.
@@ -250,7 +252,7 @@ When writing ordinary memories to this brain:
 
 ## Memory Types
 
-- `manifest`: canonical instructions for using this brain
+- `brainstem`: canonical instructions for using this brain
 - `project-log`: running project context and progress
 - `decision`: durable decision records
 - `preference`: owner/team preferences
@@ -282,12 +284,12 @@ For a new setup request, respond with:
 2. **MC form values**
 3. **Next step** asking the user to create the P2 and return with the URL
 
-Do not include the manifest in this first response unless requested.
+Do not include the Brainstem in this first response unless requested.
 
 For a verification request, respond with:
 
 1. whether the P2 was reachable
-2. whether the manifest was found
+2. whether the Brainstem was found
 3. the loaded brain profile, if available
 4. missing or risky setup items
 5. the next action needed to make the brain usable
