@@ -131,6 +131,7 @@ The first version should be skills-first. Skills define the behavior and convent
    - For Claude Code, configure `SessionStart`, `PostToolUse`, `Stop`, and `SessionEnd` hooks.
    - Use a non-interactive child agent to publish a session-summary post and update Memory.
    - Treat hook setup as explicit user permission to publish hook-derived session memory.
+   - Support a manual rehearsal that publishes the same kind of session summary and Memory update from the active session.
 
 4. **`p2-brain-write`**
    - Save new durable context back to the brain.
@@ -238,6 +239,8 @@ The Stop hook is the important part. It receives the Claude transcript path, ses
 The hook should publish, not merely remind. Hook setup is explicit user permission for automatic publication of session summaries and derived Memory updates. Sensitive memory still requires care: ask during the live session when needed, and omit unresolved sensitive details from hook output.
 
 Claude Code is the first supported hook target because its hook payload includes the fields p2-kit needs. Codex hook support should be treated as experimental until verified in the user's current Codex build.
+
+For testing, the same write path can be rehearsed on demand from an active session: publish one `session-summary` post from the current conversation, update the Memory page, and report both URLs. That validates the P2 write behavior and taxonomy. It does not prove the installed hook fired; the real hook test is to dirty a Claude Code session, let it stop, and confirm that the child `claude -p` run created or updated the session summary and Memory.
 
 ## Memory Post Shape
 
@@ -380,13 +383,13 @@ This project uses a P2 as portable agent memory.
 - Brain: Shaun's Brain
 - Brain URL: https://shaunsbrain.wordpress.com/
 - Brainstem: https://shaunsbrain.wordpress.com/brainstem/
-- Memory: <pending>
+- Memory: https://shaunsbrain.wordpress.com/memory/
 - Project: p2-kit
 - Scope: p2-kit project memory, decisions, preferences, and handoffs
 - Owner: Shaun Andrews
 - Audience: Private - Shaun only
 - Write mode: Defined by Brainstem; no project-level override
-- Last verified: 2026-05-08
+- Last verified: 2026-05-11
 
 ## Agent Instructions
 

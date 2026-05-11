@@ -1,6 +1,6 @@
 ---
 name: p2-brain-hooks
-description: Install and manage automatic P2 brain memory hooks. Use when a user wants Claude Code or another agent client to automatically load a P2 brain at session start, publish session summaries to P2, update the Memory page from Short Term and Long Term context, configure project hooks, repair hook setup, test hook firing, or enable/disable automatic P2 brain publishing.
+description: Install and manage automatic P2 brain memory hooks. Use when a user wants Claude Code or another agent client to automatically load a P2 brain at session start, publish session summaries to P2, update the Memory page from Short Term and Long Term context, configure project hooks, repair hook setup, simulate or test hook firing, manually rehearse a closing-hook publish, or enable/disable automatic P2 brain publishing.
 ---
 
 # P2 Brain Hooks
@@ -27,6 +27,7 @@ For Claude Code, install project-local hooks that:
 - Make hook publishing idempotent by session/dirty marker so retries update or skip instead of duplicating posts.
 - Avoid recursive hook runs by setting `P2_KIT_HOOK_CHILD=1` for non-interactive child agents.
 - If automatic publishing fails during `Stop`, block stopping once so the active agent can report/fix the failure. If already inside a stop-hook continuation, do not loop.
+- When the user asks to manually rehearse or "actually do" the closing-hook behavior, publish one session-summary post and update Memory from the active session using the same standards.
 
 ## Workflow
 
@@ -97,7 +98,22 @@ Sensitive memory: ask during the session; if unresolved, omit from hook output.
 Shared brains: follow the brain write mode.
 ```
 
-### 5. Verification
+### 5. Manual Rehearsal
+
+Use this path when the user asks to simulate the closing hook, rehearse the hook, or actually publish the closing-hook output from the active session.
+
+1. Read `P2-BRAIN.md`, Brainstem, and Memory.
+2. Summarize the active session. Do not copy raw chat or transcript content.
+3. Publish one `session-summary` post using the same post shape as the automatic hook.
+4. Apply categories `Brain`, `Summaries` and tags `p2-brain`, `session-summary`, plus a project tag when known.
+5. Update Memory:
+   - `Short Term`: active work, recent changes, open loops
+   - `Long Term`: durable decisions, preferences, project facts, canonical links
+6. Report the session-summary URL and Memory URL.
+
+Manual rehearsal validates the P2 write path, taxonomy, post shape, and Memory update. It does not prove the installed hook fired; use the verification steps below for that.
+
+### 6. Verification
 
 After installing:
 
@@ -126,3 +142,11 @@ For install/repair requests, report:
 4. enabled hook events
 5. whether a smoke test was run
 6. next test step for the user
+
+For manual rehearsal requests, report:
+
+1. session-summary post URL
+2. Memory page URL
+3. Short Term updates
+4. Long Term updates
+5. any skipped sensitive or uncertain items
