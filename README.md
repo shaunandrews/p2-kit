@@ -86,7 +86,7 @@ Suggested setup flow:
 5. Add the intended human owner and any collaborators.
 6. Give the agent the P2 URL.
 7. The agent verifies access and creates the initial published `Brainstem` and `Memory` pages.
-8. The agent inspects the default `About` page and offers to replace it if it is generic.
+8. The agent inspects the default `About` page and replaces it automatically if it is generic.
 9. The agent publishes a first initialization post when the P2 is new/empty.
 10. The agent writes a local `P2-BRAIN.md` pointer file in the current project.
 
@@ -107,7 +107,7 @@ The first version should be skills-first. Skills define the behavior and convent
    - Accept an existing P2 URL and skip the setup flow.
    - Create and publish the initial `Brainstem` page as WordPress blocks when it is missing.
    - Create and publish the initial `Memory` page when it is missing.
-   - Offer to update the default `About` page without overwriting customized About content.
+   - Replace default `About` page content without overwriting customized About content.
    - Publish the first `brain-init` post when the P2 is new/empty and no prior init post exists.
    - Save a local `P2-BRAIN.md` pointer file for future agents.
    - After the user creates the P2, verify access and load the Brainstem.
@@ -188,14 +188,14 @@ The setup flow creates a few different content surfaces with different jobs:
 - **Brainstem page:** canonical agent protocol.
 - **Memory page:** compact current context.
 - **About page:** human-facing description of the P2 brain.
-- **First post:** visible initialization event in the P2 timeline.
+- **First post:** human-facing launch note in the P2 timeline.
 
-New P2s often have a generic About page. `p2-brain-init` should inspect it and offer to replace it with a concise description and links to Brainstem and Memory. It should not overwrite a customized About page unless the user explicitly confirms.
+New P2s often have a generic About page. `p2-brain-init` should inspect it and replace it automatically when it is missing, empty, or clearly generic. It should not overwrite a customized About page unless the user explicitly confirms.
 
-The first post should be published after Brainstem and Memory exist, but only when the P2 is new/empty or no prior initialization post exists and the user wants one. It should be short:
+The first post should be published after Brainstem and Memory exist, but only when the P2 is new/empty or no prior initialization post exists and the user wants one. It should be more narrative than procedural:
 
 ```markdown
-# Brain initialized
+Title: The brain comes online
 
 Type: brain-init
 Status: current
@@ -203,22 +203,21 @@ Date: 2026-05-11
 Confidence: high
 Source: p2-brain-init
 
-## Summary
+This P2 is now a portable brain: a place where agents can leave durable context instead of letting every useful decision, preference, and handoff disappear when a chat window closes.
 
-This P2 has been initialized as a brain for agents.
+The first job is simple. Remember the shape of the work. Keep the small, current stuff close at hand in Memory. Put the durable stuff into posts that humans can read, correct, and link to. Let future agents arrive here, read the Brainstem, check Memory, and continue with less ceremony.
 
-## Created
+The core pieces are in place: Brainstem holds the operating instructions, Memory holds the short-term and long-term working context, and future posts will capture decisions, handoffs, project logs, summaries, preferences, and artifacts.
 
-- Brainstem
-- Memory
-- Project pointer
+This is not meant to be a hidden database. It is meant to be a shared surface: hosted, searchable, inspectable, and portable across agents.
 
-## Next Steps
+Next, add the first useful memories and install hooks if this project should publish session summaries automatically.
 
-- Add useful Short Term and Long Term memory.
-- Install hooks if this project should auto-publish session summaries.
-- Customize the About page if it still uses the default placeholder.
+Brainstem: <Brainstem URL>
+Memory: <Memory URL or pending>
 ```
+
+Use categories for broad content families and tags for filtering. The first initialization post should use categories `Brain` and `Memory`, with tags `p2-brain` and `brain-init`. Session-summary posts should use categories `Brain` and `Summaries`, with tags `p2-brain`, `session-summary`, and a project-specific tag when known.
 
 ## Automatic Session Memory Hooks
 
@@ -310,6 +309,16 @@ What changed and why it matters.
 - Long Term: durable context promoted from the session.
 ```
 
+Suggested taxonomy:
+
+- `brain-init`: categories `Brain`, `Memory`; tags `p2-brain`, `brain-init`
+- `session-summary`: categories `Brain`, `Summaries`; tags `p2-brain`, `session-summary`, project tag
+- `decision`: categories `Brain`, `Decisions`; tags `p2-brain`, `decision`, project tag
+- `handoff`: categories `Brain`, `Handoffs`; tags `p2-brain`, `handoff`, project tag
+- `project-log`: categories `Brain`, `Projects`; tags `p2-brain`, `project-log`, project tag
+- `preference`: categories `Brain`, `Preferences`; tags `p2-brain`, `preference`
+- `artifact`: categories `Brain`, `Artifacts`; tags `p2-brain`, `artifact`, project tag
+
 ## Brainstem Shape
 
 Every brain should have a canonical Brainstem page. The Brainstem tells an agent how to use the brain, and should be stored as normal WordPress blocks rather than raw Markdown. Agents should read its rendered or plaintext form so block markup does not become working-memory noise.
@@ -344,6 +353,10 @@ Rules:
 Memory page standard:
 - Short Term: active working context, recent changes, open loops, and information likely to change soon.
 - Long Term: durable facts, decisions, preferences, stable project context, and canonical links.
+
+Standard taxonomy:
+- Categories: Brain, Memory, Projects, Decisions, Handoffs, Artifacts, Preferences, Summaries
+- Tags: p2-brain, brain-init, brainstem, memory, short-term, long-term, session-summary, decision, handoff, project-log, artifact, preference, summary
 
 Hook policy:
 - Session summaries: auto-publish from configured hooks.

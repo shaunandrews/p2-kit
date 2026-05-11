@@ -5,7 +5,7 @@ This project uses a P2 as portable agent memory.
 - Brain: Shaun's Brain
 - Brain URL: https://shaunsbrain.wordpress.com/
 - Brainstem: https://shaunsbrain.wordpress.com/brainstem/
-- Memory: <pending>
+- Memory: https://shaunsbrain.wordpress.com/memory/
 - Project: p2-kit
 - Scope: p2-kit project memory, decisions, preferences, and handoffs
 - Owner: Shaun Andrews

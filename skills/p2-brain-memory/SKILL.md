@@ -150,6 +150,16 @@ After creating or updating a memory post, add or update one concise bullet on th
 
 For automatic hook writes, use `session-summary` posts. They should summarize what changed, decisions made, open loops, and the Short Term / Long Term Memory updates derived from the session. Do not copy raw transcripts.
 
+Use standard taxonomy when available:
+
+- `brain-init`: categories `Brain`, `Memory`; tags `p2-brain`, `brain-init`
+- `session-summary`: categories `Brain`, `Summaries`; tags `p2-brain`, `session-summary`, project tag
+- `decision`: categories `Brain`, `Decisions`; tags `p2-brain`, `decision`, project tag
+- `handoff`: categories `Brain`, `Handoffs`; tags `p2-brain`, `handoff`, project tag
+- `project-log`: categories `Brain`, `Projects`; tags `p2-brain`, `project-log`, project tag
+- `preference`: categories `Brain`, `Preferences`; tags `p2-brain`, `preference`
+- `artifact`: categories `Brain`, `Artifacts`; tags `p2-brain`, `artifact`, project tag
+
 ### 6. Output Shape
 
 For load/recall requests:

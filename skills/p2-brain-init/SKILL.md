@@ -7,7 +7,7 @@ description: Initialize a new P2 brain for an AI agent. Use when a user wants to
 
 ## Purpose
 
-Guide a human through creating a new P2 brain, then verify it and prepare the initial `Brainstem`, `Memory`, optional About page update, and first initialization post.
+Guide a human through creating a new P2 brain, then verify it and prepare the initial `Brainstem`, `Memory`, safe About page handling, and first initialization post.
 
 Do not silently provision a new P2. Current agent-accessible `context-a8c` tools can work with existing P2s, but do not expose a normal tool for creating a brand-new P2. Treat P2 creation as an explicit human-in-the-loop setup step through the MC P2 tool:
 
@@ -25,9 +25,10 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - When reading an existing Brainstem, use plaintext or rendered content for reasoning; do not carry raw block comments in working context.
 - When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
 - When `Memory` is missing during initial setup, create and publish it without asking again.
-- Inspect the `About` page during setup. Offer to update it when it is missing, empty, or clearly generic. Do not overwrite a customized About page without explicit confirmation.
+- Inspect the `About` page during setup. Replace it automatically when it is missing, empty, or clearly generic. Do not overwrite a customized About page without explicit confirmation.
 - Create a first published initialization post only when the P2 appears new/empty or when no prior initialization post exists and the user wants one.
-- Do not create duplicate initialization posts. Search for an existing `brain-init` or `Brain initialized` post before creating one.
+- Do not create duplicate initialization posts. Search for an existing `brain-init` or `The brain comes online` post before creating one.
+- Apply standard categories and tags to setup posts when taxonomy tools are available.
 - After the Brainstem exists, create a local `P2-BRAIN.md` pointer file when working in a writable project.
 - Do not pause with a yes/no publish question before creating the initial Brainstem.
 - For ordinary memory writes after setup, follow the Brainstem write mode; do not bake in a draft-first default.
@@ -59,7 +60,7 @@ If a URL/domain/blog ID is provided:
 4. After verification, look for `Brainstem`.
 5. If `Brainstem` is missing, create and publish it.
 6. If `Memory` is missing, create and publish it.
-7. Inspect the `About` page and offer a safe update if it appears generic.
+7. Inspect the `About` page and replace it automatically if it appears generic.
 8. Create the first initialization post when appropriate.
 9. Create or update the local `P2-BRAIN.md` pointer file if the current project is writable.
 
@@ -196,7 +197,7 @@ Useful `context-a8c` operations when available:
 
 - `wpcom` provider, `p2-sites`: discover accessible P2s
 - `wpcom` provider, `posts-text`: read posts/pages from a P2
-- `wpcom` provider, `content-authoring`: list/read pages and posts; create the initial Brainstem and Memory pages; inspect/update About; create the first initialization post; create or update ordinary memory content according to write mode
+- `wpcom` provider, `content-authoring`: list/read pages and posts; create the initial Brainstem and Memory pages; inspect/update About; create the first initialization post; create/update categories and tags when available; create or update ordinary memory content according to write mode
 - `wpcom` provider, `get-blog-report-card`: inspect site metadata when normal P2 discovery fails
 - `wpcom` provider, `site-activity-log`: inspect recent site activity when confirming newly created sites
 
@@ -366,6 +367,35 @@ Promotion rules:
 - `session-summary`: automatic summaries from configured hooks
 - `summary`: periodic compaction of recent activity
 
+## Standard Taxonomy
+
+Categories:
+
+- Brain
+- Memory
+- Projects
+- Decisions
+- Handoffs
+- Artifacts
+- Preferences
+- Summaries
+
+Tags:
+
+- p2-brain
+- brain-init
+- brainstem
+- memory
+- short-term
+- long-term
+- session-summary
+- decision
+- handoff
+- project-log
+- artifact
+- preference
+- summary
+
 ## Indexes
 
 - Memory: <pending>
@@ -418,8 +448,8 @@ New P2s often start with a generic About page. A brain P2 should have an About p
 
 Classify the About page:
 
-- **Missing:** offer to create an About page.
-- **Empty or clearly generic:** offer to replace it.
+- **Missing:** create an About page.
+- **Empty or clearly generic:** replace it automatically.
 - **Customized:** leave it alone and report that it appears customized.
 
 Treat a page as clearly generic only when the content is empty or matches default placeholder language such as:
@@ -431,7 +461,7 @@ Treat a page as clearly generic only when the content is empty or matches defaul
 
 Do not infer that an About page is generic just because it is short. If it contains specific project/team/owner wording, links, or custom intent, treat it as customized.
 
-When offering an update, keep the proposed About page short:
+When creating or replacing About, keep it short:
 
 ```markdown
 # About
@@ -446,13 +476,13 @@ Agents should start with:
 This P2 stores durable context such as decisions, preferences, handoffs, project state, and links to source material. It should not store secrets or raw private conversations when a summary and source link are enough.
 ```
 
-Only update an existing About page after explicit user confirmation, unless the user already specifically asked to update the About page.
+Only ask before updating About when it appears customized. If the page is missing, empty, or clearly generic, update it as part of initialization and report that the default About page was replaced.
 
 When writing with `content-authoring`, convert this shape to serialized WordPress block HTML before passing it as `content.raw`.
 
 ### 10. Create the First Initialization Post
 
-The first post should be a published initialization event, not another copy of the Brainstem. It seeds the P2 timeline, validates that posting works, and gives humans a visible "this brain is live" marker.
+The first post should be a published launch note, not another copy of the Brainstem. It seeds the P2 timeline, validates that posting works, and gives humans a visible "this brain is live" marker.
 
 Create the first initialization post after:
 
@@ -463,41 +493,90 @@ Create the first initialization post after:
 
 Do not create the first post when:
 
-- the P2 already has a `brain-init` or `Brain initialized` post
+- the P2 already has a `brain-init` or `The brain comes online` post
 - the P2 appears to be an existing/customized P2 with unrelated posts, unless the user asks for a retroactive init post
 - write tools are unavailable
 
-Use a concise published post:
+Use a human-facing post title:
+
+- `The brain comes online`
+- `<Brain name> comes online`
+- `A portable brain for <owner/team/project>`
+
+Set the WordPress post title from one of those options. Do not duplicate it as an H1 inside the post content.
+
+Use a narrative post body. Keep metadata small and the body more interesting than a setup checklist:
 
 ```markdown
-# Brain initialized
-
 Type: brain-init
 Status: current
 Date: <YYYY-MM-DD>
 Confidence: high
 Source: p2-brain-init
 
-## Summary
+This P2 is now a portable brain: a place where agents can leave durable context instead of letting every useful decision, preference, and handoff disappear when a chat window closes.
 
-<Brain name> has been initialized as a P2 brain for <owner/team/project>.
+The first job is simple. Remember the shape of the work. Keep the small, current stuff close at hand in Memory. Put the durable stuff into posts that humans can read, correct, and link to. Let future agents arrive here, read the Brainstem, check Memory, and continue with less ceremony.
 
-## Created
+The core pieces are in place: Brainstem holds the operating instructions, Memory holds the short-term and long-term working context, and future posts will capture decisions, handoffs, project logs, summaries, preferences, and artifacts.
 
-- Brainstem: <Brainstem URL>
-- Memory: <Memory URL or pending>
-- Project pointer: <P2-BRAIN.md created/updated/skipped>
+This is not meant to be a hidden database. It is meant to be a shared surface: hosted, searchable, inspectable, and portable across agents.
 
-## Next Steps
+Next, add the first useful memories and install hooks if this project should publish session summaries automatically.
+```
 
-- Add useful Short Term and Long Term memory.
-- Install hooks if this project should auto-publish session summaries.
-- Customize the About page if it still uses the default placeholder.
+Also include links at the end when available:
+
+```markdown
+Brainstem: <Brainstem URL>
+Memory: <Memory URL or pending>
 ```
 
 When writing with `content-authoring`, convert this shape to serialized WordPress block HTML before passing it as `content.raw`.
 
-### 11. Create the Project Brain Pointer
+### 11. Standard Taxonomy
+
+Use categories for broad content families and tags for machine/human filtering.
+
+Recommended categories:
+
+- `Brain`
+- `Memory`
+- `Projects`
+- `Decisions`
+- `Handoffs`
+- `Artifacts`
+- `Preferences`
+- `Summaries`
+
+Recommended tags:
+
+- `p2-brain`
+- `brain-init`
+- `brainstem`
+- `memory`
+- `short-term`
+- `long-term`
+- `session-summary`
+- `decision`
+- `handoff`
+- `project-log`
+- `artifact`
+- `preference`
+- `summary`
+- project-specific tag, e.g. `project-p2-kit`
+
+For the first initialization post, use:
+
+- categories: `Brain`, `Memory`
+- tags: `p2-brain`, `brain-init`
+
+For automatic session-summary posts, use:
+
+- categories: `Brain`, `Summaries`
+- tags: `p2-brain`, `session-summary`, project-specific tag when known
+
+### 12. Create the Project Brain Pointer
 
 After the Brainstem exists, create a concise `P2-BRAIN.md` file in the project root when filesystem tools are available and the project is writable. This file lets future agents discover the right brain without the user repeating the URL.
 
@@ -556,10 +635,11 @@ For a request that includes a P2 URL/domain/blog ID, respond with:
 1. **Verification**: reachable site, blog ID if available, privacy, owner, and relevant stickers
 2. **Brainstem**: found, created, or unable to create
 3. **Memory**: found, created, or unable to create
-4. **About**: missing, generic with offered update, customized and left alone, updated, or skipped
-5. **First post**: created, already present, offered, skipped because the P2 is not empty, or unable to create
-6. **Project file**: `P2-BRAIN.md` created, already present, updated, or skipped
-7. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
+4. **About**: missing and created, generic and replaced, customized and left alone, updated after confirmation, or skipped
+5. **First post**: created, already present, skipped because the P2 is not empty, or unable to create
+6. **Taxonomy**: categories/tags created, already present, applied, skipped, or unavailable
+7. **Project file**: `P2-BRAIN.md` created, already present, updated, or skipped
+8. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
 
 For a verification request, respond with:
 

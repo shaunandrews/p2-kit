@@ -81,7 +81,8 @@ The installer:
 5. The child updates the `Memory` page:
    - `Short Term`: active work, recent changes, open loops
    - `Long Term`: durable facts, decisions, preferences, canonical links
-6. The hook records success in `.p2-kit/state/` and clears the dirty marker.
+6. The child applies standard taxonomy when available: categories `Brain`, `Summaries`; tags `p2-brain`, `session-summary`, and a project-specific tag.
+7. The hook records success in `.p2-kit/state/` and clears the dirty marker.
 
 `SessionEnd` runs the same publisher as a fallback. If it cannot publish, it writes an outbox record under `.p2-kit/outbox/`.
 

@@ -195,9 +195,12 @@ Required actions:
    - Short Term: active work, recent changes, open loops, and context likely to change soon.
    - Long Term: durable facts, decisions, preferences, stable project context, and canonical links.
 6. Link the session-summary post from Memory when useful.
-7. Use WordPress core block HTML when creating/updating P2 pages or posts.
-8. Use context-a8c/wpcom/content-authoring or the available P2 tools. Include user_confirmed exactly as: "User configured p2-kit hooks to auto-publish session summaries and derived Memory updates."
-9. Omit credentials, secrets, raw private conversations, and sensitive content that was not explicitly approved during the session.
+7. Apply standard taxonomy when available:
+   - categories: Brain, Summaries
+   - tags: p2-brain, session-summary, and a project-specific tag such as project-${project.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unknown"}
+8. Use WordPress core block HTML when creating/updating P2 pages or posts.
+9. Use context-a8c/wpcom/content-authoring or the available P2 tools. Include user_confirmed exactly as: "User configured p2-kit hooks to auto-publish session summaries and derived Memory updates."
+10. Omit credentials, secrets, raw private conversations, and sensitive content that was not explicitly approved during the session.
 
 Final response:
 - Session-summary post URL
