@@ -145,15 +145,28 @@ The first version should be skills-first. Skills define the behavior and convent
 
 The **Memory** page is the primary working-memory surface for an agent. It should be a published page titled `Memory` with slug `memory`.
 
-The Memory page is not a full archive. It is the compact context layer an agent can read after the Brainstem:
+The Memory page is not a full archive. It is the compact context layer an agent can read after the Brainstem. It has two required sections:
 
-- **Now:** current projects, active threads, and immediate context
-- **Important:** durable facts, preferences, and decisions that should be easy to find
-- **Recent:** notable recent updates, with dates and source links
-- **Open loops:** unresolved questions, follow-ups, and revisit dates
-- **Indexes:** links to canonical decision, project, handoff, and preference posts
+- **Short Term:** active working set for current projects, recent changes, open loops, and context likely to change soon.
+- **Long Term:** durable facts, decisions, preferences, stable project context, and canonical links that should survive across sessions.
 
-Agents should keep the Memory page concise. When a memory needs detail, discussion, or source-heavy context, create or update a separate memory post and link it from the Memory page.
+Agents should keep the Memory page concise. Short Term is volatile and should be pruned or promoted. Long Term is curated and should change more slowly. When a memory needs detail, discussion, or source-heavy context, create or update a separate memory post and link it from the Memory page.
+
+The model is intentionally small:
+
+- **Brainstem:** always-read operating instructions for the brain.
+- **Memory page:** always-read compact working context.
+- **Supporting memory posts:** deeper records opened only when relevant.
+
+This keeps token use predictable while preserving enough structure for durable context. The Memory page should act like an agent-maintained table of contents plus working set, not a full transcript.
+
+Promotion rules:
+
+1. Capture active context in **Short Term** while it is useful for the current thread of work.
+2. Promote to **Long Term** only when it is likely to matter across sessions, agents, or projects.
+3. Link to supporting memory posts for decisions, handoffs, project logs, artifacts, and source-heavy summaries.
+4. Remove or archive stale Short Term items once they are resolved, superseded, or promoted.
+5. Preserve source links, confidence, and dates for Long Term items whenever possible.
 
 Publishing is core to the brain: memory needs to be available to future agents. Draft/review is a write mode a human or team can choose, not a global default baked into the protocol.
 
@@ -217,8 +230,15 @@ Rules:
 - Cite sources for factual claims.
 - Mark uncertain or inferred context clearly.
 - Prefer updating existing memory over creating duplicates.
+- Put active or changing context in Short Term.
+- Promote durable cross-session context to Long Term.
+- Link supporting memory posts when details or sources matter.
 - Treat review and HR content as sensitive.
 - Follow the write mode before publishing to shared P2s.
+
+Memory page standard:
+- Short Term: active working context, recent changes, open loops, and information likely to change soon.
+- Long Term: durable facts, decisions, preferences, stable project context, and canonical links.
 ```
 
 ## Project Brain Pointer

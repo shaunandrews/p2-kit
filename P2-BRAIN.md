@@ -11,7 +11,7 @@ This project uses a P2 as portable agent memory.
 - Owner: Shaun Andrews
 - Audience: Private - Shaun only
 - Write mode: Defined by Brainstem; no project-level override
-- Last verified: 2026-05-08
+- Last verified: 2026-05-11
 
 ## Agent Instructions
 

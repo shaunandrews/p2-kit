@@ -316,11 +316,27 @@ When writing ordinary memories to this brain:
 3. For shared brains, show the target P2, audience, and write mode before creating or updating memory.
 4. Prefer updating existing memory over creating duplicates.
 5. Update the Memory page for compact recent/important context.
-6. Create or update a supporting memory post when detail, discussion, or source-heavy context should be preserved.
-7. Use descriptive titles.
-8. Include source links when memory comes from another system.
-9. Mark confidence: high, medium, or low.
-10. Add a revisit date when the memory may become stale.
+6. Put active or changing context in Short Term.
+7. Promote durable cross-session context to Long Term.
+8. Create or update a supporting memory post when detail, discussion, or source-heavy context should be preserved, then link it from Memory.
+9. Use descriptive titles.
+10. Include source links when memory comes from another system.
+11. Mark confidence: high, medium, or low.
+12. Add a revisit date when the memory may become stale.
+
+## Memory Page Standard
+
+The Memory page is the compact context layer agents read after the Brainstem. It should stay short enough to load every time and link out to supporting posts when details matter.
+
+- Short Term: active working context, recent changes, open loops, and information likely to change soon. Prune aggressively or promote when durable.
+- Long Term: durable facts, decisions, preferences, stable project context, and canonical links. Curate more slowly and preserve source links, confidence, and dates when possible.
+
+Promotion rules:
+
+1. Capture active context in Short Term while it is useful for current work.
+2. Promote to Long Term only when it is likely to matter across sessions, agents, or projects.
+3. Link to supporting memory posts for decisions, handoffs, project logs, artifacts, and source-heavy summaries.
+4. Remove or archive stale Short Term items once they are resolved, superseded, or promoted.
 
 ## Memory Types
 
@@ -363,29 +379,16 @@ Use this shape:
 
 Last updated: <YYYY-MM-DD>
 
-## Now
+## Short Term
 
-- <current high-signal context>
+- <active working context, recent changes, open loops, or context likely to change soon>
 
-## Important
+## Long Term
 
-- <durable memory that should stay easy to find>
-
-## Recent
-
-- <dated recent memory with source link when available>
-
-## Open Loops
-
-- <question, follow-up, or revisit date>
-
-## Indexes
-
-- Decisions: <pending>
-- Projects: <pending>
-- Handoffs: <pending>
-- Preferences: <pending>
+- <durable fact, decision, preference, stable project context, or canonical link>
 ```
+
+Short Term is volatile and should be pruned or promoted. Long Term is curated and should change more slowly. Link to supporting memory posts when a memory needs detail, discussion, or source-heavy context.
 
 When writing with `content-authoring`, convert this shape to serialized WordPress block HTML before passing it as `content.raw`.
 

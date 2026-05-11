@@ -9,7 +9,7 @@ description: Load and maintain the primary Memory page for a P2 brain. Use when 
 
 Use the P2 brain's `Memory` page as the compact, current working-memory layer for agents.
 
-The Memory page is a published page titled `Memory` with slug `memory`. It is read after the Brainstem and before deeper search. It should stay short, useful, and linked to source material or supporting memory posts.
+The Memory page is a published page titled `Memory` with slug `memory`. It is read after the Brainstem and before deeper search. It should stay short, useful, and linked to source material or supporting memory posts. It has exactly two required sections: `Short Term` and `Long Term`.
 
 ## Operating Rules
 
@@ -20,6 +20,8 @@ The Memory page is a published page titled `Memory` with slug `memory`. It is re
 - Before tool writes, state the target P2, audience, write mode, and planned update; include the user's request or confirmation in `user_confirmed` when the tool requires it.
 - For sensitive content, shared brains, ambiguous write mode, or memory moving from private to shared context, ask before writing.
 - Keep the Memory page compact. It is a high-signal map, not a transcript or archive.
+- Keep `Short Term` volatile: active work, recent changes, open loops, and context likely to change soon.
+- Keep `Long Term` curated: durable facts, decisions, preferences, stable project context, and canonical links.
 - Prefer updating existing memory over creating duplicates.
 - Use source links whenever memory comes from Slack, P2, GitHub, Linear, Zendesk, files, screenshots, or another external system.
 - Mark confidence: high, medium, or low.
@@ -59,10 +61,12 @@ Useful `context-a8c` operations when available:
 Choose the lightest durable write:
 
 - **Small recent/important fact:** update the Memory page only.
-- **Decision, preference, handoff, project log, artifact, or source-heavy context:** create or update a supporting memory post, then link it from the Memory page.
+- **Active or changing context:** update `Short Term`.
+- **Durable cross-session context:** update `Long Term`.
+- **Decision, preference, handoff, project log, artifact, or source-heavy context:** create or update a supporting memory post, then link it from `Long Term`.
 - **Correction:** update the wrong memory in place and note what changed.
 - **Conflict:** preserve both claims, cite sources, and mark the conflict until resolved.
-- **Stale context:** move it out of `Now`, keep it under `Recent` or a supporting post if still useful, and add a revisit note when appropriate.
+- **Stale context:** remove it from `Short Term`; promote, link, or archive it if still useful.
 
 ### 4. Update the Memory Page
 
@@ -73,37 +77,27 @@ The Memory page should use this semantic shape:
 
 Last updated: <YYYY-MM-DD>
 
-## Now
+## Short Term
 
-- <current high-signal context>
+- <active working context, recent changes, open loops, or context likely to change soon>
 
-## Important
+## Long Term
 
-- <durable memory that should stay easy to find>
-
-## Recent
-
-- <dated recent memory with source link when available>
-
-## Open Loops
-
-- <question, follow-up, or revisit date>
-
-## Indexes
-
-- Decisions: <link or pending>
-- Projects: <link or pending>
-- Handoffs: <link or pending>
-- Preferences: <link or pending>
+- <durable fact, decision, preference, stable project context, or canonical link>
 ```
 
 Keep each section short:
 
-- `Now`: usually 3-7 bullets
-- `Important`: usually 5-12 bullets
-- `Recent`: usually 5-10 dated bullets
-- `Open Loops`: only unresolved items
-- `Indexes`: links to canonical pages/posts when they exist
+- `Short Term`: usually 3-10 bullets, aggressively pruned
+- `Long Term`: usually 5-20 bullets, curated and linked to supporting posts
+
+Promotion rules:
+
+1. Capture active context in `Short Term` while it is useful for the current thread of work.
+2. Promote to `Long Term` only when it is likely to matter across sessions, agents, or projects.
+3. Link to supporting memory posts for decisions, handoffs, project logs, artifacts, and source-heavy summaries.
+4. Remove or archive stale `Short Term` items once they are resolved, superseded, or promoted.
+5. Preserve source links, confidence, and dates for `Long Term` items whenever possible.
 
 When writing to WordPress, convert the shape to serialized core block HTML:
 
@@ -113,7 +107,7 @@ When writing to WordPress, convert the shape to serialized core block HTML:
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
-<h2 class="wp-block-heading">Now</h2>
+<h2 class="wp-block-heading">Short Term</h2>
 <!-- /wp:heading -->
 
 <!-- wp:list -->
@@ -159,7 +153,7 @@ After creating or updating a memory post, add or update one concise bullet on th
 For load/recall requests:
 
 1. **Brain loaded**: brain name, URL, audience, write mode
-2. **Memory summary**: relevant `Now`, `Important`, and `Recent` context
+2. **Memory summary**: relevant `Short Term` and `Long Term` context
 3. **Gaps**: missing Memory page, missing indexes, stale context, or confidence limits
 4. **Next action**: what the agent will do with that context
 
