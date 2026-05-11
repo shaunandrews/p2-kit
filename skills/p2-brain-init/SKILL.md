@@ -17,6 +17,7 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 
 - Keep the setup phase short and focused. The user is filling out a form and may have questions.
 - If the user's request includes a P2 URL or WordPress.com domain, skip the MC setup flow and start with verification.
+- If the user's request does not include a URL but `P2-BRAIN.md` exists, use its Brain URL and run the full setup reconciliation. Do not stop after verifying Brainstem and Memory.
 - Do not generate the full Brainstem during the initial MC setup unless the user explicitly asks for it.
 - Stop after giving form values and ask the user to return with the created P2 URL.
 - Keep brain creation explicit because it sets audience, permissions, and long-term memory boundaries.
@@ -26,10 +27,11 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
 - When `Memory` is missing during initial setup, create and publish it without asking again.
 - Inspect the `About` page during setup. Replace it automatically when it is missing, empty, or clearly generic. Do not overwrite a customized About page without explicit confirmation.
-- Create a first published initialization post only when the P2 appears new/empty or when no prior initialization post exists and the user wants one.
+- Create a first published initialization post when no prior initialization post exists and there are no unrelated published posts. Brainstem, Memory, and About pages do not count against creating the first post.
 - Do not create duplicate initialization posts. Search for an existing `brain-init` or `The brain comes online` post before creating one.
 - Apply standard categories and tags to setup posts when taxonomy tools are available.
 - After the Brainstem exists, create a local `P2-BRAIN.md` pointer file when working in a writable project.
+- Never report "nothing to do" or "already initialized" until Brainstem, Memory, About, first post, taxonomy, and project pointer have all been checked.
 - Do not pause with a yes/no publish question before creating the initial Brainstem.
 - For ordinary memory writes after setup, follow the Brainstem write mode; do not bake in a draft-first default.
 - Do not publish or update ordinary memory content without explicit user confirmation unless the Brainstem explicitly allows multiplayer write for the acting agent.
@@ -52,17 +54,21 @@ Check whether the user provided a P2 URL or domain, such as:
 - `shaunsbrain.wordpress.com`
 - a WordPress.com blog ID
 
+Also check whether the current project has `P2-BRAIN.md`.
+
 If a URL/domain/blog ID is provided:
 
 1. Normalize it to a site identifier usable by WordPress.com tools.
 2. Skip the setup questions, name suggestions, and MC form guidance.
-3. Go directly to **Verify the Brain P2**.
-4. After verification, look for `Brainstem`.
-5. If `Brainstem` is missing, create and publish it.
-6. If `Memory` is missing, create and publish it.
-7. Inspect the `About` page and replace it automatically if it appears generic.
-8. Create the first initialization post when appropriate.
-9. Create or update the local `P2-BRAIN.md` pointer file if the current project is writable.
+3. Go directly to **Full Setup Reconciliation**.
+
+If no URL/domain/blog ID is provided but `P2-BRAIN.md` exists:
+
+1. Read `P2-BRAIN.md`.
+2. Use `Brain URL` as the target site.
+3. Go directly to **Full Setup Reconciliation**.
+4. Do not ask the user for a URL.
+5. Do not stop after checking only Brainstem and Memory.
 
 Do not ask what name or slug the P2 should use when a URL already exists. Infer name, owner, privacy, and type from site metadata where available.
 
@@ -175,9 +181,9 @@ Create the P2 with those values, then send me the P2 URL. I will verify access a
 
 This keeps the first interaction focused on completing the form.
 
-### 6. Verify the Brain P2
+### 6. Full Setup Reconciliation
 
-When the request includes a P2 URL/domain/blog ID, or after the user returns with a newly created P2 URL:
+When the request includes a P2 URL/domain/blog ID, uses local `P2-BRAIN.md`, or after the user returns with a newly created P2 URL:
 
 1. If `context-a8c` is available, load the `wpcom` provider.
 2. Use `get-blog-report-card` with the P2 URL to confirm the blog exists, identify the blog ID, owner, privacy, and stickers.
@@ -189,9 +195,23 @@ When the request includes a P2 URL/domain/blog ID, or after the user returns wit
 8. After the Brainstem exists, look for a page titled `Memory`.
 9. If `Memory` is missing and the site is reachable, create and publish the Memory page.
 10. Look for a page titled `About`; decide whether it is missing, generic, or customized.
-11. Look for an existing initialization post before creating a new one.
+11. Look for an existing initialization post before creating a new one. If none exists, check whether there are unrelated published posts.
 12. Create or update the local `P2-BRAIN.md` pointer file.
 13. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
+
+This reconciliation is idempotent and reparative. Run every check even when the brain is already initialized:
+
+- If Brainstem exists, leave it alone unless it is missing required fields or the user asked to repair it.
+- If Memory exists, leave it alone unless the user asked to repair it.
+- If About is missing, create it.
+- If About is generic/default, replace it automatically.
+- If About appears customized, leave it alone.
+- If the first initialization post is missing and there are no unrelated published posts, create it. Do not count Brainstem, Memory, or About pages as posts.
+- If the first initialization post already exists, do not duplicate it.
+- If standard taxonomy is missing and taxonomy tools are available, create/apply it.
+- If `P2-BRAIN.md` is missing or stale in the current project, create/update it.
+
+Do not summarize the result as "already initialized" unless the About page and first initialization post were explicitly checked and reported.
 
 Useful `context-a8c` operations when available:
 
@@ -489,7 +509,9 @@ Create the first initialization post after:
 - the Brainstem exists
 - the Memory page exists or has been intentionally skipped
 - the site has no existing initialization post
-- the P2 appears new/empty, or the user explicitly asks for the first post
+- the P2 has no unrelated published posts, or the user explicitly asks for the first post
+
+Do not count setup pages (`Brainstem`, `Memory`, or `About`) as unrelated published posts.
 
 Do not create the first post when:
 
@@ -630,16 +652,18 @@ For a new setup request, respond with:
 
 Do not include the Brainstem in this first response unless requested.
 
-For a request that includes a P2 URL/domain/blog ID, respond with:
+For a request that includes a P2 URL/domain/blog ID or uses local `P2-BRAIN.md`, respond with:
 
 1. **Verification**: reachable site, blog ID if available, privacy, owner, and relevant stickers
 2. **Brainstem**: found, created, or unable to create
 3. **Memory**: found, created, or unable to create
 4. **About**: missing and created, generic and replaced, customized and left alone, updated after confirmation, or skipped
-5. **First post**: created, already present, skipped because the P2 is not empty, or unable to create
+5. **First post**: created, already present, skipped because unrelated posts exist, or unable to create
 6. **Taxonomy**: categories/tags created, already present, applied, skipped, or unavailable
 7. **Project file**: `P2-BRAIN.md` created, already present, updated, or skipped
 8. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
+
+Do not use a shortened output like "Brainstem present, Memory present, nothing to do." That misses reparative setup work.
 
 For a verification request, respond with:
 

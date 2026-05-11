@@ -108,9 +108,10 @@ The first version should be skills-first. Skills define the behavior and convent
    - Create and publish the initial `Brainstem` page as WordPress blocks when it is missing.
    - Create and publish the initial `Memory` page when it is missing.
    - Replace default `About` page content without overwriting customized About content.
-   - Publish the first `brain-init` post when the P2 is new/empty and no prior init post exists.
+   - Publish the first `brain-init` post when no prior init post exists and there are no unrelated published posts.
    - Save a local `P2-BRAIN.md` pointer file for future agents.
-   - After the user creates the P2, verify access and load the Brainstem.
+   - After the user creates the P2, verify access and reconcile the full setup.
+   - When `P2-BRAIN.md` already exists, use it and still reconcile About and the first post.
 
 1. **`p2-brain-load`**
    - Read local `P2-BRAIN.md` when present to discover the default brain.
@@ -192,7 +193,7 @@ The setup flow creates a few different content surfaces with different jobs:
 
 New P2s often have a generic About page. `p2-brain-init` should inspect it and replace it automatically when it is missing, empty, or clearly generic. It should not overwrite a customized About page unless the user explicitly confirms.
 
-The first post should be published after Brainstem and Memory exist, but only when the P2 is new/empty or no prior initialization post exists and the user wants one. It should be more narrative than procedural:
+The first post should be published after Brainstem and Memory exist, but only when no prior initialization post exists and there are no unrelated published posts, or when the user explicitly asks for it. Brainstem, Memory, and About are setup pages and do not count against creating the first post. It should be more narrative than procedural:
 
 ```markdown
 Title: The brain comes online
@@ -218,6 +219,8 @@ Memory: <Memory URL or pending>
 ```
 
 Use categories for broad content families and tags for filtering. The first initialization post should use categories `Brain` and `Memory`, with tags `p2-brain` and `brain-init`. Session-summary posts should use categories `Brain` and `Summaries`, with tags `p2-brain`, `session-summary`, and a project-specific tag when known.
+
+`p2-brain-init` is reparative. Running it again should not stop just because Brainstem and Memory exist. It should always check the full setup surface: Brainstem, Memory, About, first post, taxonomy, and `P2-BRAIN.md`.
 
 ## Automatic Session Memory Hooks
 
