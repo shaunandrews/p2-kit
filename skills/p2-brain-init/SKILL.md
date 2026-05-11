@@ -26,8 +26,8 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
 - After the Brainstem exists, create a local `P2-BRAIN.md` pointer file when working in a writable project.
 - Do not pause with a yes/no publish question before creating the initial Brainstem.
-- For ordinary memory writes after setup, draft by default unless the user explicitly asks to publish.
-- Do not publish or update ordinary memory content without explicit user confirmation.
+- For ordinary memory writes after setup, follow the Brainstem write mode; if no write mode is defined, draft by default unless the user explicitly asks to publish.
+- Do not publish or update ordinary memory content without explicit user confirmation unless the Brainstem explicitly allows multiplayer write for the acting agent.
 - Prefer private access for personal brains and early project brains.
 - Prefer MC `Personal` type for a private personal brain, and use direct site-scoped WordPress.com/content-authoring tools to access it.
 - Do not treat absence from `p2-sites` or rejection by `posts-text` as proof that a Personal P2 is inaccessible.
@@ -62,12 +62,13 @@ If no URL/domain/blog ID is provided, continue with the setup flow below.
 
 ### 2. Identify the Minimum Setup
 
-Gather only what is needed to complete the MC form.
+Gather only what is needed to complete the MC form and Brainstem.
 
 Required:
 
 - **Brain purpose:** personal work memory, project memory, team memory, design memory, review memory, etc.
 - **Access:** just the user, named collaborators, a team, or broader group
+- **Write mode:** owner-write, maintainer-write, draft-only shared, or multiplayer write
 
 Useful if already known:
 
@@ -79,6 +80,7 @@ If key information is missing, ask at most two concise questions. Good questions
 
 - "What kind of brain are you setting up?"
 - "Who should have access?"
+- "Who should be allowed to write memories?"
 
 If the user already answered those, proceed with reasonable defaults and label them as assumptions.
 
@@ -151,6 +153,7 @@ Field guidance:
 - **Internal AI Access:** For an agent brain, this usually needs to be enabled. If the user wants very sensitive memory, discuss the tradeoff before recommending it.
 - **AI summaries:** Useful for shared or project brains, less important for a brand-new personal brain.
 - **P2 users:** Keep narrow at creation time. More users can be added later.
+- **Shared brain access:** For read-only shared brains, add readers broadly but keep writers/maintainers narrow. For multiplayer write brains, add only trusted collaborators and document write rules in the Brainstem.
 
 ### 5. Stop and Wait
 
@@ -266,9 +269,10 @@ Brain name: <name>
 Brain type: <type>
 Owner: <owner>
 Audience: <private/collaborators/team>
+Write mode: <owner-write/maintainer-write/draft-only shared/multiplayer write>
 P2 URL: <URL>
 Initialized: <YYYY-MM-DD>
-Default write behavior: Publish the Brainstem during setup; draft ordinary memories before publishing
+Default write behavior: Publish the Brainstem during setup; follow write mode for ordinary memories
 
 ## Purpose
 
@@ -303,12 +307,14 @@ When using this P2 as a brain:
 
 When writing ordinary memories to this brain:
 
-1. Draft by default unless the user explicitly asks to publish.
-2. Prefer updating existing memory over creating duplicates.
-3. Use descriptive titles.
-4. Include source links when memory comes from another system.
-5. Mark confidence: high, medium, or low.
-6. Add a revisit date when the memory may become stale.
+1. Follow the write mode in this Brainstem.
+2. Draft by default unless the user explicitly asks to publish or the Brainstem allows multiplayer publishing.
+3. For shared brains, show the target P2, audience, and write mode before creating or updating memory.
+4. Prefer updating existing memory over creating duplicates.
+5. Use descriptive titles.
+6. Include source links when memory comes from another system.
+7. Mark confidence: high, medium, or low.
+8. Add a revisit date when the memory may become stale.
 
 ## Memory Types
 
@@ -331,6 +337,7 @@ When writing ordinary memories to this brain:
 
 - Ask before publishing ordinary memories.
 - Ask before moving memory from a private brain to a shared brain.
+- In multiplayer brains, avoid competing canonical memories; update or link the existing memory instead.
 - Do not store secrets.
 - Summarize sensitive source material instead of copying it.
 - Flag uncertain or inferred information.
@@ -366,6 +373,7 @@ This project uses a P2 as portable agent memory.
 - Scope: <what this project should use the brain for>
 - Owner: <owner>
 - Audience: <private/collaborators/team>
+- Write mode: <owner-write/maintainer-write/draft-only shared/multiplayer write>
 - Last verified: <YYYY-MM-DD>
 
 ## Agent Instructions
@@ -373,7 +381,7 @@ This project uses a P2 as portable agent memory.
 1. Load the Brainstem before substantive work when project context, prior decisions, or owner preferences may matter.
 2. Search the brain before assuming important context is missing.
 3. Use the brain when the user asks to remember, save, hand off, continue, or explain prior decisions.
-4. Draft ordinary memories before publishing unless the user explicitly asks to publish.
+4. Follow the Brainstem write mode before creating or updating memory.
 5. Cite source links and mark assumptions, inferences, and stale context.
 ```
 

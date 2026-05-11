@@ -1,8 +1,8 @@
 # p2-kit
 
-`p2-kit` turns a P2 into a portable, human-readable brain for AI agents.
+`p2-kit` turns a P2 into a portable, human-readable brain for AI agents and teams.
 
-The premise is simple: a P2 can be more than a publishing surface. It can be a hosted, permissioned, inspectable memory layer that any capable agent can load, use, update, and hand off. Instead of tying an agent's long-term context to one vendor, runtime, or local machine, the "brain" is a P2 URL plus a small set of conventions.
+The premise is simple: a P2 can be more than a publishing surface. It can be a hosted, permissioned, inspectable memory layer that any capable agent can load, use, update, and hand off. A brain can be private to one person, shared read-only with a team, or collaboratively written by multiple people and agents. Instead of tying long-term context to one vendor, runtime, or local machine, the "brain" is a P2 URL plus a small set of conventions.
 
 ## Why P2 as a Brain?
 
@@ -11,7 +11,7 @@ P2 already has useful properties for agent memory:
 - **Hosted:** available from anywhere an authorized agent can reach it.
 - **Portable:** usable across agents, sessions, and tools.
 - **Readable:** humans can inspect and correct the memory directly.
-- **Social:** shared brains can support teams, projects, and rituals.
+- **Social:** shared brains can give teams a common working context.
 - **Permissioned:** access can follow existing P2 and WordPress.com controls.
 - **Durable:** important decisions, context, and artifacts do not disappear when a chat ends.
 
@@ -45,11 +45,25 @@ Different P2s can act as different brains:
 - **Personal brain:** private work memory, preferences, goals, recurring context, review evidence
 - **Project brain:** decisions, current state, open questions, milestones, artifacts
 - **Team brain:** rituals, norms, updates, shared references, operating context
+- **Shared reference brain:** read-mostly context that many agents can load, with a small set of maintainers
+- **Multiplayer brain:** collaboratively written context where team members and their agents can draft or publish memory under shared rules
 - **Design brain:** snaps, visual explorations, feedback, rationale, iterations
 - **Review brain:** self-feedback, accomplishments, impact evidence, growth notes
 - **Incident brain:** timeline, decisions, remediation, follow-ups, learnings
 
 Swapping brains should be as simple as pointing the agent at a different P2 and loading that brain's Brainstem.
+
+## Shared Brains
+
+The same protocol works for teams. A shared brain lets team members and their agents work from the same context instead of each person rebuilding it in separate chats.
+
+Useful shared-brain modes:
+
+- **Read-only shared brain:** many people and agents can load/search context, but only maintainers write. Good for team norms, project state, onboarding, and canonical decisions.
+- **Draft-only shared brain:** many agents can create proposed memories as drafts, while humans review/publish. Good for early team use where trust and format are still developing.
+- **Multiplayer write brain:** multiple people and agents can publish under explicit rules. Good for high-trust teams, fast-moving projects, incidents, or design/product rituals where shared context needs to stay current.
+
+Shared brains need clearer rules than personal brains: who owns the Brainstem, who can publish, when to update an existing memory instead of adding a new post, and how to handle conflicting context. The Brainstem should make the audience and write mode explicit.
 
 ## Creating a Brain P2
 
@@ -103,7 +117,7 @@ The first version should be skills-first. Skills define the behavior and convent
    - Save new durable context back to the brain.
    - Choose whether to update an existing memory post or draft a new one.
    - Include source links, confidence, status, and follow-ups.
-   - Draft by default unless the user explicitly asks to publish.
+   - Follow the Brainstem write mode; draft by default when the mode is missing or conservative.
 
 3. **`p2-brain-handoff`**
    - Summarize current work so another agent can continue.
@@ -165,8 +179,10 @@ Every brain should have a canonical Brainstem page. The Brainstem tells an agent
 
 Brain name: Shaun Work Brain
 Owner: Shaun
+Audience: Private - Shaun only
+Write mode: Owner-write
 Scope: Private work memory
-Default behavior: publish the Brainstem during setup; draft ordinary memories before publishing
+Default behavior: publish the Brainstem during setup; follow write mode for ordinary memories
 Primary indexes:
 - Active projects
 - Decisions
@@ -197,6 +213,7 @@ This project uses a P2 as portable agent memory.
 - Scope: p2-kit project memory, decisions, preferences, and handoffs
 - Owner: Shaun Andrews
 - Audience: Private - Shaun only
+- Write mode: Owner-write; agents draft ordinary memories unless explicitly asked to publish
 - Last verified: 2026-05-08
 
 ## Agent Instructions
@@ -213,14 +230,16 @@ This project uses a P2 as portable agent memory.
 The default behavior should be conservative:
 
 - Publish the Brainstem during setup so future agents have canonical loading instructions.
-- Draft ordinary memory posts before publishing.
+- Draft ordinary memory posts before publishing unless the Brainstem explicitly allows multiplayer write.
 - Always show the target P2 and intended audience before posting.
+- For shared brains, show the write mode before creating or updating memory.
 - Cite sources for factual claims.
 - Separate facts, preferences, assumptions, and inferences.
 - Mark stale or low-confidence context.
 - Treat HR, performance, customer, and private-team information as sensitive.
 - Prefer summaries and links over copying large private conversations.
 - Ask before moving context from a private brain to a shared brain.
+- In multiplayer brains, prefer updating canonical memory posts over creating competing versions.
 
 ## Getting Started
 
@@ -274,6 +293,7 @@ p2-kit/
 - What is the minimum Brainstem needed for a useful first brain?
 - Should memories be primarily posts, comments, or a mix?
 - How should agents discover canonical index posts?
+- How should shared brains handle conflicts when two agents update the same memory?
 - How should stale memory be marked and revisited?
 - What should be private by default?
 - How much should the skills rely on `context-a8c` versus plain P2/WordPress.com APIs?
