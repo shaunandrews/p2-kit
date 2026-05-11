@@ -126,7 +126,7 @@ Recommended post shape:
 ```markdown
 # <Memory type>: <short title>
 
-Type: <decision/preference/project-log/artifact/handoff/summary>
+Type: <decision/preference/project-log/artifact/handoff/session-summary/summary>
 Status: <current/stale/superseded/resolved>
 Confidence: <high/medium/low>
 Source: <links or "user-provided">
@@ -147,6 +147,8 @@ Revisit: <YYYY-MM-DD or none>
 ```
 
 After creating or updating a memory post, add or update one concise bullet on the Memory page linking to it.
+
+For automatic hook writes, use `session-summary` posts. They should summarize what changed, decisions made, open loops, and the Short Term / Long Term Memory updates derived from the session. Do not copy raw transcripts.
 
 ### 6. Output Shape
 

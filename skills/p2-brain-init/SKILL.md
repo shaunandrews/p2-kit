@@ -324,6 +324,13 @@ When writing ordinary memories to this brain:
 11. Mark confidence: high, medium, or low.
 12. Add a revisit date when the memory may become stale.
 
+## Hook Policy
+
+- Session summaries: auto-publish from configured hooks.
+- Memory updates: auto-publish when derived from the same session summary.
+- Sensitive memory: ask during the session; if unresolved, omit from hook output.
+- Shared brains: follow the brain write mode.
+
 ## Memory Page Standard
 
 The Memory page is the compact context layer agents read after the Brainstem. It should stay short enough to load every time and link out to supporting posts when details matter.
@@ -346,6 +353,7 @@ Promotion rules:
 - `preference`: owner/team preferences
 - `artifact`: links to files, screenshots, posts, PRs, issues, tickets, or designs
 - `handoff`: summaries that help another agent continue work
+- `session-summary`: automatic summaries from configured hooks
 - `summary`: periodic compaction of recent activity
 
 ## Indexes

@@ -120,13 +120,19 @@ The first version should be skills-first. Skills define the behavior and convent
    - Create supporting memory posts when a detail needs its own durable record.
    - Follow the Brainstem write mode; do not bake in a project-wide draft preference.
 
-3. **`p2-brain-write`**
+3. **`p2-brain-hooks`**
+   - Install local agent hooks that automatically publish session memory.
+   - For Claude Code, configure `SessionStart`, `PostToolUse`, `Stop`, and `SessionEnd` hooks.
+   - Use a non-interactive child agent to publish a session-summary post and update Memory.
+   - Treat hook setup as explicit user permission to publish hook-derived session memory.
+
+4. **`p2-brain-write`**
    - Save new durable context back to the brain.
    - Choose whether to update the Memory page, update an existing memory post, or create a new memory post.
    - Include source links, confidence, status, and follow-ups.
    - Follow the Brainstem write mode.
 
-4. **`p2-brain-handoff`**
+5. **`p2-brain-handoff`**
    - Summarize current work so another agent can continue.
    - Capture what changed, what matters, open questions, next steps, and relevant links.
    - Write a durable handoff post or update an existing project log.
@@ -170,6 +176,23 @@ Promotion rules:
 
 Publishing is core to the brain: memory needs to be available to future agents. Draft/review is a write mode a human or team can choose, not a global default baked into the protocol.
 
+## Automatic Session Memory Hooks
+
+Hooks make the brain useful without relying on the agent to remember to write memory manually.
+
+For Claude Code, `p2-kit` installs local hooks into `.claude/settings.local.json`:
+
+- **`SessionStart`:** add a short reminder to load `P2-BRAIN.md`, Brainstem, and Memory.
+- **`PostToolUse`:** mark the session dirty after meaningful file, shell, or write-like MCP activity.
+- **`Stop`:** before the agent fully stops, run a non-interactive child `claude -p` process that publishes memory.
+- **`SessionEnd`:** fallback publisher/outbox writer if the Stop hook did not complete.
+
+The Stop hook is the important part. It receives the Claude transcript path, session ID, current directory, and final assistant message. The hook starts a child agent with `P2_KIT_HOOK_CHILD=1` to avoid recursion. That child reads `P2-BRAIN.md` and the transcript, publishes a `session-summary` post to the P2, updates the Memory page, records success under `.p2-kit/state/`, and exits.
+
+The hook should publish, not merely remind. Hook setup is explicit user permission for automatic publication of session summaries and derived Memory updates. Sensitive memory still requires care: ask during the live session when needed, and omit unresolved sensitive details from hook output.
+
+Claude Code is the first supported hook target because its hook payload includes the fields p2-kit needs. Codex hook support should be treated as experimental until verified in the user's current Codex build.
+
 ## Memory Post Shape
 
 Memory should be structured enough for agents and readable enough for humans.
@@ -206,6 +229,41 @@ P2 is hosted, permissioned, human-readable, linkable, and already part of the ex
 - Create the first three skills: load, write, handoff.
 ```
 
+Automatic session-summary posts should use the same structure:
+
+```markdown
+# Session Summary: p2-kit - 2026-05-11
+
+Type: session-summary
+Project: p2-kit
+Session ID: <agent session id>
+Status: current
+Date: 2026-05-11
+Confidence: high
+Source: agent transcript
+
+## Summary
+
+What changed and why it matters.
+
+## Decisions
+
+- Durable decisions made during the session.
+
+## Changes
+
+- Files, P2 posts, tickets, PRs, or other artifacts touched.
+
+## Open Loops
+
+- Follow-ups for the next agent or session.
+
+## Memory Updates
+
+- Short Term: active context to keep fresh.
+- Long Term: durable context promoted from the session.
+```
+
 ## Brainstem Shape
 
 Every brain should have a canonical Brainstem page. The Brainstem tells an agent how to use the brain, and should be stored as normal WordPress blocks rather than raw Markdown. Agents should read its rendered or plaintext form so block markup does not become working-memory noise.
@@ -239,6 +297,12 @@ Rules:
 Memory page standard:
 - Short Term: active working context, recent changes, open loops, and information likely to change soon.
 - Long Term: durable facts, decisions, preferences, stable project context, and canonical links.
+
+Hook policy:
+- Session summaries: auto-publish from configured hooks.
+- Memory updates: auto-publish when derived from the same session summary.
+- Sensitive memory: ask during the session; if unresolved, omit from hook output.
+- Shared brains: follow the brain write mode.
 ```
 
 ## Project Brain Pointer
@@ -299,12 +363,14 @@ The practical starting point is to define the protocol before building many work
 6. Add a `P2-BRAIN.md` pointer to one project.
 7. Write `p2-brain-load`.
 8. Implement `p2-brain-memory`.
-9. Implement `p2-brain-write`.
-10. Implement `p2-brain-handoff`.
-11. Test the flow against one private P2:
+9. Implement `p2-brain-hooks`.
+10. Implement `p2-brain-write`.
+11. Implement `p2-brain-handoff`.
+12. Test the flow against one private P2:
    - load the brain
    - ask a task-specific question
    - write a memory
+   - auto-publish a session summary from hooks
    - produce a handoff
    - start a new session and reload from the brain
 
@@ -318,6 +384,11 @@ p2-kit/
       SKILL.md
     p2-brain-memory/
       SKILL.md
+    p2-brain-hooks/
+      SKILL.md
+      scripts/
+        install-claude-hooks.mjs
+        p2-brain-hook.mjs
     p2-brain-load/
       SKILL.md
     p2-brain-write/

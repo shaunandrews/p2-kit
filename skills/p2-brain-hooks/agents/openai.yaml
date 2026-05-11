@@ -1,0 +1,4 @@
+interface:
+  display_name: "P2 Brain Hooks"
+  short_description: "Install hooks that publish P2 brain session memory."
+  default_prompt: "Install automatic P2 brain hooks for this project."
