@@ -85,10 +85,12 @@ Suggested setup flow:
 4. Keep the P2 private unless there is a specific reason to share it.
 5. Add the intended human owner and any collaborators.
 6. Give the agent the P2 URL.
-7. The agent verifies access and creates the initial published `Brainstem` page.
-8. The agent writes a local `P2-BRAIN.md` pointer file in the current project.
+7. The agent verifies access and creates the initial published `Brainstem` and `Memory` pages.
+8. The agent inspects the default `About` page and offers to replace it if it is generic.
+9. The agent publishes a first initialization post when the P2 is new/empty.
+10. The agent writes a local `P2-BRAIN.md` pointer file in the current project.
 
-For a first version, a skill can help by opening the MC tool for the user, preparing the recommended site name and form values, then verifying the created P2 and publishing the initial Brainstem once the user provides the URL.
+For a first version, a skill can help by opening the MC tool for the user, preparing the recommended site name and form values, then verifying the created P2 and publishing the initial setup content once the user provides the URL.
 
 `p2-kit` should not try to silently provision P2s. Brain creation changes audience, permissions, and long-term memory boundaries, so it should stay explicit.
 
@@ -104,6 +106,9 @@ The first version should be skills-first. Skills define the behavior and convent
    - Recommend a brain name, URL, privacy posture, and owner/collaborators.
    - Accept an existing P2 URL and skip the setup flow.
    - Create and publish the initial `Brainstem` page as WordPress blocks when it is missing.
+   - Create and publish the initial `Memory` page when it is missing.
+   - Offer to update the default `About` page without overwriting customized About content.
+   - Publish the first `brain-init` post when the P2 is new/empty and no prior init post exists.
    - Save a local `P2-BRAIN.md` pointer file for future agents.
    - After the user creates the P2, verify access and load the Brainstem.
 
@@ -176,6 +181,45 @@ Promotion rules:
 
 Publishing is core to the brain: memory needs to be available to future agents. Draft/review is a write mode a human or team can choose, not a global default baked into the protocol.
 
+## Setup Content
+
+The setup flow creates a few different content surfaces with different jobs:
+
+- **Brainstem page:** canonical agent protocol.
+- **Memory page:** compact current context.
+- **About page:** human-facing description of the P2 brain.
+- **First post:** visible initialization event in the P2 timeline.
+
+New P2s often have a generic About page. `p2-brain-init` should inspect it and offer to replace it with a concise description and links to Brainstem and Memory. It should not overwrite a customized About page unless the user explicitly confirms.
+
+The first post should be published after Brainstem and Memory exist, but only when the P2 is new/empty or no prior initialization post exists and the user wants one. It should be short:
+
+```markdown
+# Brain initialized
+
+Type: brain-init
+Status: current
+Date: 2026-05-11
+Confidence: high
+Source: p2-brain-init
+
+## Summary
+
+This P2 has been initialized as a brain for agents.
+
+## Created
+
+- Brainstem
+- Memory
+- Project pointer
+
+## Next Steps
+
+- Add useful Short Term and Long Term memory.
+- Install hooks if this project should auto-publish session summaries.
+- Customize the About page if it still uses the default placeholder.
+```
+
 ## Automatic Session Memory Hooks
 
 Hooks make the brain useful without relying on the agent to remember to write memory manually.
@@ -228,6 +272,8 @@ P2 is hosted, permissioned, human-readable, linkable, and already part of the ex
 - Define the Brainstem format.
 - Create the first three skills: load, write, handoff.
 ```
+
+Use `Type: brain-init` for the first initialization post and `Type: session-summary` for automatic hook summaries.
 
 Automatic session-summary posts should use the same structure:
 
@@ -291,6 +337,7 @@ Rules:
 - Put active or changing context in Short Term.
 - Promote durable cross-session context to Long Term.
 - Link supporting memory posts when details or sources matter.
+- Use brain-init for the first setup post.
 - Treat review and HR content as sensitive.
 - Follow the write mode before publishing to shared P2s.
 

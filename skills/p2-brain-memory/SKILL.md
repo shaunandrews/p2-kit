@@ -126,7 +126,7 @@ Recommended post shape:
 ```markdown
 # <Memory type>: <short title>
 
-Type: <decision/preference/project-log/artifact/handoff/session-summary/summary>
+Type: <brain-init/decision/preference/project-log/artifact/handoff/session-summary/summary>
 Status: <current/stale/superseded/resolved>
 Confidence: <high/medium/low>
 Source: <links or "user-provided">
