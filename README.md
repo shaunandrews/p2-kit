@@ -24,17 +24,18 @@ A brain is a P2 with a protocol.
 At minimum, a brain should have:
 
 - a **Brainstem** page, written as normal WordPress blocks, that explains the brain's purpose, owner, scope, rules, and indexes
+- a **Memory** page that stays compact and current with recent and important memory
 - a local **`P2-BRAIN.md` pointer** in each project that should use the brain
 - **memory posts** for decisions, preferences, project state, artifacts, meeting notes, and unresolved questions
 - **summaries** that compact recent activity into useful working context
 - **source links** back to Slack, Linear, GitHub, Zendesk, P2s, files, screenshots, or other evidence
-- **hygiene rules** for stale context, sensitive content, confidence, and draft vs. publish behavior
+- **hygiene rules** for stale context, sensitive content, confidence, write modes, and publish behavior
 
 Agents can then be told:
 
 > Use this P2 as your brain.
 
-The agent loads the Brainstem, searches relevant posts, builds a working-memory summary, performs the task, and writes back useful new context.
+The agent loads the Brainstem, reads the Memory page, searches relevant posts, performs the task, and writes useful new context back to the brain.
 
 For project work, the local `P2-BRAIN.md` file is the discovery hook. It tells an agent which hosted brain to load without requiring the user to paste the P2 URL into every session.
 
@@ -113,13 +114,19 @@ The first version should be skills-first. Skills define the behavior and convent
    - Search task-relevant memory.
    - Produce a compact working-memory summary for the current agent session.
 
-2. **`p2-brain-write`**
-   - Save new durable context back to the brain.
-   - Choose whether to update an existing memory post or draft a new one.
-   - Include source links, confidence, status, and follow-ups.
-   - Follow the Brainstem write mode; draft by default when the mode is missing or conservative.
+2. **`p2-brain-memory`**
+   - Read and maintain the primary Memory page.
+   - Keep recent and important memory compact, current, and cited.
+   - Create supporting memory posts when a detail needs its own durable record.
+   - Follow the Brainstem write mode; do not bake in a project-wide draft preference.
 
-3. **`p2-brain-handoff`**
+3. **`p2-brain-write`**
+   - Save new durable context back to the brain.
+   - Choose whether to update the Memory page, update an existing memory post, or create a new memory post.
+   - Include source links, confidence, status, and follow-ups.
+   - Follow the Brainstem write mode.
+
+4. **`p2-brain-handoff`**
    - Summarize current work so another agent can continue.
    - Capture what changed, what matters, open questions, next steps, and relevant links.
    - Write a durable handoff post or update an existing project log.
@@ -133,6 +140,22 @@ The first version should be skills-first. Skills define the behavior and convent
 - **`p2-self-feedback`**: collect review evidence and draft self-feedback
 - **`p2-performance-review`**: structure review input with evidence and examples
 - **`p2-decision-record`**: capture durable decision records
+
+## Memory System
+
+The **Memory** page is the primary working-memory surface for an agent. It should be a published page titled `Memory` with slug `memory`.
+
+The Memory page is not a full archive. It is the compact context layer an agent can read after the Brainstem:
+
+- **Now:** current projects, active threads, and immediate context
+- **Important:** durable facts, preferences, and decisions that should be easy to find
+- **Recent:** notable recent updates, with dates and source links
+- **Open loops:** unresolved questions, follow-ups, and revisit dates
+- **Indexes:** links to canonical decision, project, handoff, and preference posts
+
+Agents should keep the Memory page concise. When a memory needs detail, discussion, or source-heavy context, create or update a separate memory post and link it from the Memory page.
+
+Publishing is core to the brain: memory needs to be available to future agents. Draft/review is a write mode a human or team can choose, not a global default baked into the protocol.
 
 ## Memory Post Shape
 
@@ -180,10 +203,11 @@ Every brain should have a canonical Brainstem page. The Brainstem tells an agent
 Brain name: Shaun Work Brain
 Owner: Shaun
 Audience: Private - Shaun only
-Write mode: Owner-write
+Write mode: Owner-defined
 Scope: Private work memory
 Default behavior: publish the Brainstem during setup; follow write mode for ordinary memories
 Primary indexes:
+- Memory
 - Active projects
 - Decisions
 - Preferences
@@ -194,7 +218,7 @@ Rules:
 - Mark uncertain or inferred context clearly.
 - Prefer updating existing memory over creating duplicates.
 - Treat review and HR content as sensitive.
-- Ask before publishing to shared P2s.
+- Follow the write mode before publishing to shared P2s.
 ```
 
 ## Project Brain Pointer
@@ -209,20 +233,22 @@ This project uses a P2 as portable agent memory.
 - Brain: Shaun's Brain
 - Brain URL: https://shaunsbrain.wordpress.com/
 - Brainstem: https://shaunsbrain.wordpress.com/brainstem/
+- Memory: <pending>
 - Project: p2-kit
 - Scope: p2-kit project memory, decisions, preferences, and handoffs
 - Owner: Shaun Andrews
 - Audience: Private - Shaun only
-- Write mode: Owner-write; agents draft ordinary memories unless explicitly asked to publish
+- Write mode: Defined by Brainstem; no project-level override
 - Last verified: 2026-05-08
 
 ## Agent Instructions
 
 1. Load the Brainstem before substantive work when project context, prior decisions, or owner preferences may matter.
-2. Search the brain before assuming important context is missing.
-3. Use the brain when the user asks to remember, save, hand off, continue, or explain prior decisions.
-4. Draft ordinary memories before publishing unless the user explicitly asks to publish.
-5. Cite source links and mark assumptions, inferences, and stale context.
+2. Load the Memory page when it exists; it is the compact recent/important context layer.
+3. Search the brain before assuming important context is missing.
+4. Use the brain when the user asks to remember, save, hand off, continue, or explain prior decisions.
+5. Follow the Brainstem write mode before creating or updating memory.
+6. Cite source links and mark assumptions, inferences, and stale context.
 ```
 
 ## Safety and Hygiene
@@ -230,7 +256,7 @@ This project uses a P2 as portable agent memory.
 The default behavior should be conservative:
 
 - Publish the Brainstem during setup so future agents have canonical loading instructions.
-- Draft ordinary memory posts before publishing unless the Brainstem explicitly allows multiplayer write.
+- Follow the Brainstem write mode for ordinary memories.
 - Always show the target P2 and intended audience before posting.
 - For shared brains, show the write mode before creating or updating memory.
 - Cite sources for factual claims.
@@ -252,9 +278,10 @@ The practical starting point is to define the protocol before building many work
 5. Create one private P2 manually through the MC P2 tool.
 6. Add a `P2-BRAIN.md` pointer to one project.
 7. Write `p2-brain-load`.
-8. Implement `p2-brain-write` with drafts-only behavior.
-9. Implement `p2-brain-handoff`.
-10. Test the flow against one private P2:
+8. Implement `p2-brain-memory`.
+9. Implement `p2-brain-write`.
+10. Implement `p2-brain-handoff`.
+11. Test the flow against one private P2:
    - load the brain
    - ask a task-specific question
    - write a memory
@@ -268,6 +295,8 @@ p2-kit/
   README.md
   skills/
     p2-brain-init/
+      SKILL.md
+    p2-brain-memory/
       SKILL.md
     p2-brain-load/
       SKILL.md

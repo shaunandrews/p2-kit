@@ -1,6 +1,6 @@
 ---
 name: p2-brain-init
-description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; provides an existing P2 URL to initialize or verify; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants an initial Brainstem page after the P2 exists; wants a local P2-BRAIN.md project pointer; or has created a P2 and wants the agent to verify access and prepare it for use.
+description: Initialize a new P2 brain for an AI agent. Use when a user wants to create, configure, bootstrap, or test a P2 as portable agent memory; provides an existing P2 URL to initialize or verify; needs instructions for creating a new brain P2 through the Automattic MC P2 tool; wants concise form-filling guidance for the MC P2 creation form; wants initial Brainstem and Memory pages after the P2 exists; wants a local P2-BRAIN.md project pointer; or has created a P2 and wants the agent to verify access and prepare it for use.
 ---
 
 # P2 Brain Init
@@ -26,7 +26,7 @@ Do not silently provision a new P2. Current agent-accessible `context-a8c` tools
 - When initializing a verified brain P2 and `Brainstem` is missing, create and publish the Brainstem page without asking again.
 - After the Brainstem exists, create a local `P2-BRAIN.md` pointer file when working in a writable project.
 - Do not pause with a yes/no publish question before creating the initial Brainstem.
-- For ordinary memory writes after setup, follow the Brainstem write mode; if no write mode is defined, draft by default unless the user explicitly asks to publish.
+- For ordinary memory writes after setup, follow the Brainstem write mode; do not bake in a draft-first default.
 - Do not publish or update ordinary memory content without explicit user confirmation unless the Brainstem explicitly allows multiplayer write for the acting agent.
 - Prefer private access for personal brains and early project brains.
 - Prefer MC `Personal` type for a private personal brain, and use direct site-scoped WordPress.com/content-authoring tools to access it.
@@ -178,14 +178,16 @@ When the request includes a P2 URL/domain/blog ID, or after the user returns wit
 5. Look for a page titled `Brainstem`.
 6. If found, summarize the loaded brain profile and note any missing Brainstem fields.
 7. If missing and the site is reachable, create and publish the Brainstem page.
-8. After the Brainstem exists, create or update the local `P2-BRAIN.md` pointer file.
-9. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
+8. After the Brainstem exists, look for a page titled `Memory`.
+9. If `Memory` is missing and the site is reachable, create and publish the Memory page.
+10. Create or update the local `P2-BRAIN.md` pointer file.
+11. Do not proceed as if the brain is ready until the Brainstem exists or the user explicitly asks to continue without it.
 
 Useful `context-a8c` operations when available:
 
 - `wpcom` provider, `p2-sites`: discover accessible P2s
 - `wpcom` provider, `posts-text`: read posts/pages from a P2
-- `wpcom` provider, `content-authoring`: list/read pages and posts; create the initial Brainstem page; create or update ordinary memory content after confirmation
+- `wpcom` provider, `content-authoring`: list/read pages and posts; create the initial Brainstem and Memory pages; create or update ordinary memory content according to write mode
 - `wpcom` provider, `get-blog-report-card`: inspect site metadata when normal P2 discovery fails
 - `wpcom` provider, `site-activity-log`: inspect recent site activity when confirming newly created sites
 
@@ -272,7 +274,8 @@ Audience: <private/collaborators/team>
 Write mode: <owner-write/maintainer-write/draft-only shared/multiplayer write>
 P2 URL: <URL>
 Initialized: <YYYY-MM-DD>
-Default write behavior: Publish the Brainstem during setup; follow write mode for ordinary memories
+Memory page: <Memory page URL or pending>
+Default write behavior: Publish the Brainstem and Memory pages during setup; follow write mode for ordinary memories
 
 ## Purpose
 
@@ -297,24 +300,27 @@ This brain should not store:
 When using this P2 as a brain:
 
 1. Read the Brainstem first.
-2. Search for task-relevant memory before assuming context is missing.
-3. Prefer recent summaries, active project indexes, and decision records.
-4. Treat older memory as potentially stale unless reaffirmed.
-5. Cite source links for factual claims.
-6. Distinguish facts, assumptions, inferences, and preferences.
+2. Read the Memory page next when it exists.
+3. Search for task-relevant memory before assuming context is missing.
+4. Prefer recent summaries, active project indexes, and decision records.
+5. Treat older memory as potentially stale unless reaffirmed.
+6. Cite source links for factual claims.
+7. Distinguish facts, assumptions, inferences, and preferences.
 
 ## Writing Instructions for Agents
 
 When writing ordinary memories to this brain:
 
 1. Follow the write mode in this Brainstem.
-2. Draft by default unless the user explicitly asks to publish or the Brainstem allows multiplayer publishing.
+2. Treat publishing as the normal way memory becomes useful to future agents unless the write mode says otherwise.
 3. For shared brains, show the target P2, audience, and write mode before creating or updating memory.
 4. Prefer updating existing memory over creating duplicates.
-5. Use descriptive titles.
-6. Include source links when memory comes from another system.
-7. Mark confidence: high, medium, or low.
-8. Add a revisit date when the memory may become stale.
+5. Update the Memory page for compact recent/important context.
+6. Create or update a supporting memory post when detail, discussion, or source-heavy context should be preserved.
+7. Use descriptive titles.
+8. Include source links when memory comes from another system.
+9. Mark confidence: high, medium, or low.
+10. Add a revisit date when the memory may become stale.
 
 ## Memory Types
 
@@ -328,6 +334,7 @@ When writing ordinary memories to this brain:
 
 ## Indexes
 
+- Memory: <pending>
 - Active projects: <pending>
 - Decisions: <pending>
 - Handoffs: <pending>
@@ -335,7 +342,7 @@ When writing ordinary memories to this brain:
 
 ## Safety Rules
 
-- Ask before publishing ordinary memories.
+- Follow the write mode before publishing ordinary memories.
 - Ask before moving memory from a private brain to a shared brain.
 - In multiplayer brains, avoid competing canonical memories; update or link the existing memory instead.
 - Do not store secrets.
@@ -343,7 +350,46 @@ When writing ordinary memories to this brain:
 - Flag uncertain or inferred information.
 ```
 
-### 8. Create the Project Brain Pointer
+### 8. Create the Memory Page
+
+After the Brainstem exists, create a concise published page titled `Memory` with slug `memory` when it is missing. The Memory page is the primary working-memory surface agents read after the Brainstem.
+
+Do not put every detail on the Memory page. Keep it compact and link to supporting memory posts when a memory needs detail, discussion, or source-heavy context.
+
+Use this shape:
+
+```markdown
+# Memory
+
+Last updated: <YYYY-MM-DD>
+
+## Now
+
+- <current high-signal context>
+
+## Important
+
+- <durable memory that should stay easy to find>
+
+## Recent
+
+- <dated recent memory with source link when available>
+
+## Open Loops
+
+- <question, follow-up, or revisit date>
+
+## Indexes
+
+- Decisions: <pending>
+- Projects: <pending>
+- Handoffs: <pending>
+- Preferences: <pending>
+```
+
+When writing with `content-authoring`, convert this shape to serialized WordPress block HTML before passing it as `content.raw`.
+
+### 9. Create the Project Brain Pointer
 
 After the Brainstem exists, create a concise `P2-BRAIN.md` file in the project root when filesystem tools are available and the project is writable. This file lets future agents discover the right brain without the user repeating the URL.
 
@@ -369,6 +415,7 @@ This project uses a P2 as portable agent memory.
 - Brain: <brain name>
 - Brain URL: <brain URL>
 - Brainstem: <brainstem URL>
+- Memory: <memory page URL or pending>
 - Project: <project name>
 - Scope: <what this project should use the brain for>
 - Owner: <owner>
@@ -379,10 +426,11 @@ This project uses a P2 as portable agent memory.
 ## Agent Instructions
 
 1. Load the Brainstem before substantive work when project context, prior decisions, or owner preferences may matter.
-2. Search the brain before assuming important context is missing.
-3. Use the brain when the user asks to remember, save, hand off, continue, or explain prior decisions.
-4. Follow the Brainstem write mode before creating or updating memory.
-5. Cite source links and mark assumptions, inferences, and stale context.
+2. Load the Memory page when it exists; it is the compact recent/important context layer.
+3. Search the brain before assuming important context is missing.
+4. Use the brain when the user asks to remember, save, hand off, continue, or explain prior decisions.
+5. Follow the Brainstem write mode before creating or updating memory.
+6. Cite source links and mark assumptions, inferences, and stale context.
 ```
 
 ## Output Shapes
@@ -399,8 +447,9 @@ For a request that includes a P2 URL/domain/blog ID, respond with:
 
 1. **Verification**: reachable site, blog ID if available, privacy, owner, and relevant stickers
 2. **Brainstem**: found, created, or unable to create
-3. **Project file**: `P2-BRAIN.md` created, already present, updated, or skipped
-4. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
+3. **Memory**: found, created, or unable to create
+4. **Project file**: `P2-BRAIN.md` created, already present, updated, or skipped
+5. **Next step**: report that the brain is ready, ask how to handle a blocked write, or suggest the next memory to add
 
 For a verification request, respond with:
 

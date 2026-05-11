@@ -1,0 +1,4 @@
+interface:
+  display_name: "P2 Brain Memory"
+  short_description: "Load and maintain a P2 brain Memory page."
+  default_prompt: "Load and update my P2 brain memory."
